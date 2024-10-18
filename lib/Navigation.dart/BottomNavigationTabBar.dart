@@ -18,7 +18,10 @@ List<Event> favoriteEvent = [];
 class _BottomNavigationTabBarState extends State<BottomNavigationTabBar> {
   @override
   Widget build(BuildContext context) {
-    List<Event> eventList = registeredEvent;
+    List<Event> eventList = registeredEvent.where((listItem) {
+      return DateTime.parse(listItem.dateStart[0].toString())
+          .isAfter(DateTime.parse(DateTime.now().toString()));
+    }).toList();
 
     void keep(Event eventitem) {
       bool eventexisted = favoriteEvent.contains(eventitem);
@@ -33,11 +36,16 @@ class _BottomNavigationTabBarState extends State<BottomNavigationTabBar> {
       }
     }
 
+    void navigateToEventPage() {setState(() {
+      selectedPage=1;
+    });}
+
     List<Widget> showPage = [
       Homescreen(
         eventList: eventList,
         favoriteEventList: favoriteEvent,
         keep: keep,
+        navigateToEventPage: navigateToEventPage,
       ), //首頁
       Eventscreen(
         eventList: eventList,
@@ -61,7 +69,7 @@ class _BottomNavigationTabBarState extends State<BottomNavigationTabBar> {
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: '首頁'),
           BottomNavigationBarItem(icon: Icon(Icons.home), label: '活動'),
-          BottomNavigationBarItem(icon: Icon(Icons.newspaper), label: 'acg最新消息')
+          BottomNavigationBarItem(icon: Icon(Icons.newspaper), label: '最新消息')
         ],
       ),
       body: showPage[selectedPage],

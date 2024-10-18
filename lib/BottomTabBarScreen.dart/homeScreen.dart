@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hk_acg_event_information/Widget/EventListTileCard.dart';
 import 'package:hk_acg_event_information/Widget/currentEventCart.dart';
+import 'package:hk_acg_event_information/Widget/homeScreenIconWidget.dart';
 import 'package:hk_acg_event_information/model/ETAColor.dart';
 import 'package:hk_acg_event_information/model/EventModel.dart';
 
@@ -8,10 +10,12 @@ class Homescreen extends StatefulWidget {
       {super.key,
       required this.eventList,
       required this.favoriteEventList,
-      required this.keep});
+      required this.keep,
+      required this.navigateToEventPage});
   final List<Event> eventList;
   final List<Event> favoriteEventList;
   final Function(Event) keep;
+  final void Function() navigateToEventPage;
 
   @override
   State<Homescreen> createState() => _HomescreenState();
@@ -23,11 +27,12 @@ class _HomescreenState extends State<Homescreen> {
 
   @override
   Widget build(BuildContext context) {
-    final currentEventList = widget.eventList.sublist(0, 5);
+    final currentEventList = widget.eventList.sublist(1, 5); //4 item
 
     return Scaffold(
       backgroundColor: ETAColors.screenBackgroundColor,
       appBar: AppBar(
+        foregroundColor: Colors.white,
         title: const Text('香港動漫資訊'),
         backgroundColor: ETAColors.appbarColors_01,
       ),
@@ -38,17 +43,20 @@ class _HomescreenState extends State<Homescreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             space10,
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 5),
-              child: Row(
-                children: [
-                  Icon(Icons.calendar_month_sharp),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 5),
-                    child: Text('近期的活動'),
-                  ),
-                ],
-              ),
+            const HomeScreenIconWidget(
+              icon: Icons.event,
+              title: '即將舉辦的活動',
+            ),
+            EventListtilecard(
+                event: widget.eventList[0],
+                keep: widget.keep,
+                favoriteEventList: widget.favoriteEventList,
+                eventList: widget.eventList),
+            space10,
+            const Divider(indent: 5, endIndent: 5),
+            const HomeScreenIconWidget(
+              icon: Icons.calendar_month_sharp,
+              title: '近期的活動',
             ),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
@@ -78,10 +86,10 @@ class _HomescreenState extends State<Homescreen> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 10, vertical: 0),
                         shape: ContinuousRectangleBorder(
-                            borderRadius: BorderRadius.circular(8)),
+                            borderRadius: BorderRadius.circular(10)),
                         foregroundColor: Colors.white,
                         backgroundColor: Colors.blue),
-                    onPressed: () {},
+                    onPressed: widget.navigateToEventPage,
                     child: const Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisSize: MainAxisSize.min,
