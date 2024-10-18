@@ -41,7 +41,6 @@ dependencies:
   insta_image_viewer: ^1.0.4
   table_calendar: ^3.1.2
   map_launcher: ^3.5.0
-  maps_launcher: ^2.2.1
 
 dev_dependencies:
   flutter_test:
