@@ -6,7 +6,9 @@ import 'package:hk_acg_event_information/model/ETAColor.dart';
 import 'package:hk_acg_event_information/model/EventModel.dart';
 import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:intl/intl.dart';
+import 'package:map_launcher/map_launcher.dart';
 import 'package:maps_launcher/maps_launcher.dart';
+// import 'package:maps_launcher/maps_launcher.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -167,7 +169,17 @@ class _InformationscreenState extends State<Informationscreen> {
                     InkWell(
                       onTap: () {
                         MapsLauncher.launchQuery(widget.event.location);
-                      },//launch location in map
+
+                        // if (await MapLauncher.isMapAvailable(MapType.google)!=null) {
+                        //   await MapLauncher.showMarker(
+                        //     mapType: MapType.google,
+                        //     coords: Coords(37.759392, -122.5107336),
+                        //     title: "title",
+                        //     description: "description",
+                        //   );
+                        // }
+                        //   MapsLauncher.launchQuery(widget.event.location);
+                      }, //launch location in map
                       child: Row(
                         children: [
                           Text(widget.event.location,
