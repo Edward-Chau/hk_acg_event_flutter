@@ -31,22 +31,25 @@ class CurrentEventCart extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 3),
       child: InkWell(
         onTap: () {
-          Navigator.push(context, MaterialPageRoute(
-            builder: (context) {
-              return Informationscreen(
-                  event: event,
-                  time: eventTime,
-                  keep: keep,
-                  favoriteEventList: favoriteEventList,
-                  eventList: eventList);
-            },
-          ));
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return Informationscreen(
+                    event: event,
+                    time: eventTime,
+                    keep: keep,
+                    favoriteEventList: favoriteEventList,
+                    eventList: eventList);
+              },
+            ),
+          );
         },
         child: Container(
           width: 180,
-          
           color: Colors.white,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
               Stack(
@@ -67,10 +70,14 @@ class CurrentEventCart extends StatelessWidget {
                   )
                 ],
               ),
-              Text(
-                event.title,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontSize: 12),
+              Padding(
+                padding: const EdgeInsets.only(left: 3),
+                child: Text(
+                  event.title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontSize: 12),
+                ),
               ),
               const SizedBox(height: 10),
               Row(

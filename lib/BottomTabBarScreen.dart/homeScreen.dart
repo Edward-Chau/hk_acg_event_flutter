@@ -23,6 +23,8 @@ class _HomescreenState extends State<Homescreen> {
 
   @override
   Widget build(BuildContext context) {
+    final currentEventList = widget.eventList.sublist(0, 5);
+
     return Scaffold(
       backgroundColor: ETAColors.screenBackgroundColor,
       appBar: AppBar(
@@ -32,6 +34,7 @@ class _HomescreenState extends State<Homescreen> {
       body: Container(
         margin: const EdgeInsets.symmetric(horizontal: 5),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             space10,
@@ -47,30 +50,24 @@ class _HomescreenState extends State<Homescreen> {
                 ],
               ),
             ),
-            Expanded(
-              child: ListView.builder(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                itemCount: 5,
-                itemBuilder: (context, index) {
-                  return CurrentEventCart(
-                    event: widget.eventList[index],
-                    eventList: widget.eventList,
-                    keep: widget.keep,
-                    favoriteEventList: widget.favoriteEventList,
-                  );
-                },
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  ...currentEventList.map(
+                    (toElement) {
+                      return CurrentEventCart(
+                        event: toElement,
+                        eventList: widget.eventList,
+                        keep: widget.keep,
+                        favoriteEventList: widget.favoriteEventList,
+                      );
+                    },
+                  ),
+                ],
               ),
             ),
-            // CurrentEventCart(
-            //         event: widget.eventList[5],
-            //         eventList: widget.eventList,
-            //         keep: widget.keep,
-            //         favoriteEventList: widget.favoriteEventList,
-            //       )
-                  
             Text("sss")
-           
           ],
         ),
       ),
