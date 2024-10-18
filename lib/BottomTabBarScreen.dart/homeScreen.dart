@@ -67,7 +67,34 @@ class _HomescreenState extends State<Homescreen> {
                 ],
               ),
             ),
-            Text("sss")
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 0),
+                        shape: ContinuousRectangleBorder(
+                            borderRadius: BorderRadius.circular(8)),
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.blue),
+                    onPressed: () {},
+                    child: const Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text('更多活動'),
+                        Icon(Icons.arrow_forward_ios_outlined, size: 15),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const Divider(indent: 5, endIndent: 5),
           ],
         ),
       ),
