@@ -21,16 +21,18 @@ class _AllcategoryState extends State<Allcategory> {
   Widget build(BuildContext context) {
     return Container(
       color: ETAColors.screenBackgroundColor,
-      child: ListView.builder(
-        itemCount: widget.eventList.length,
-        itemBuilder: (context, index) {
-          return EventListtilecard(
-            event: widget.eventList[index],
-            favoriteEventList: widget.favoriteEventList,
-            keep: widget.keep,
-            eventList: widget.eventList,
-          );
-        },
+      child: Scrollbar(
+        child: ListView.builder(
+          itemCount: widget.eventList.length,
+          itemBuilder: (context, index) {
+            return EventListtilecard(
+              event: widget.eventList[index],
+              favoriteEventList: widget.favoriteEventList,
+              keep: widget.keep,
+              eventList: widget.eventList,
+            );
+          },
+        ),
       ),
     );
   }

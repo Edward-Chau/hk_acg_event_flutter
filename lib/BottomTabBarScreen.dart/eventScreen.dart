@@ -53,6 +53,7 @@ class _EventscreenState extends State<Eventscreen> {
               ),
             )
           ],
+          foregroundColor: Colors.white,
           backgroundColor: ETAColors.appbarColors_01,
           bottom: const TabBar(
             labelColor: Colors.white,

@@ -6,6 +6,7 @@ import 'package:hk_acg_event_information/model/ETAColor.dart';
 import 'package:hk_acg_event_information/model/EventModel.dart';
 import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:intl/intl.dart';
+import 'package:maps_launcher/maps_launcher.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -160,6 +161,20 @@ class _InformationscreenState extends State<Informationscreen> {
                               format.format(widget.event.dateStart.last)
                           ? format.format(widget.event.dateStart[0])
                           : '${format.format(widget.event.dateStart[0])} ~ ${format.format(widget.event.dateEnd.last)}',
+                    ),
+                    space,
+                    const Text('會場', style: TextStyle(color: Colors.grey)),
+                    InkWell(
+                      onTap: () {
+                        MapsLauncher.launchQuery(widget.event.location);
+                      },//launch location in map
+                      child: Row(
+                        children: [
+                          Text(widget.event.location,
+                              style: TextStyle(color: Colors.blue[800])),
+                          Icon(Icons.location_on, color: Colors.orange[800])
+                        ],
+                      ),
                     ),
                     space,
                     const Text('入場費用', style: TextStyle(color: Colors.grey)),

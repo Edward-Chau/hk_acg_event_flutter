@@ -4,6 +4,7 @@ import 'package:hk_acg_event_information/Widget/currentEventCart.dart';
 import 'package:hk_acg_event_information/Widget/homeScreenIconWidget.dart';
 import 'package:hk_acg_event_information/model/ETAColor.dart';
 import 'package:hk_acg_event_information/model/EventModel.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 class Homescreen extends StatefulWidget {
   const Homescreen(
@@ -38,72 +39,80 @@ class _HomescreenState extends State<Homescreen> {
       ),
       body: Container(
         margin: const EdgeInsets.symmetric(horizontal: 5),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            space10,
-            const HomeScreenIconWidget(
-              icon: Icons.event,
-              title: '即將舉辦的活動',
-            ),
-            EventListtilecard(
-                event: widget.eventList[0],
-                keep: widget.keep,
-                favoriteEventList: widget.favoriteEventList,
-                eventList: widget.eventList),
-            space10,
-            const Divider(indent: 5, endIndent: 5),
-            const HomeScreenIconWidget(
-              icon: Icons.calendar_month_sharp,
-              title: '近期的活動',
-            ),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              space10,
+              const HomeScreenIconWidget(
+                icon: Icons.event,
+                title: '即將舉辦的活動',
+              ),
+              EventListtilecard(
+                  event: widget.eventList[0],
+                  keep: widget.keep,
+                  favoriteEventList: widget.favoriteEventList,
+                  eventList: widget.eventList),
+              space10,
+              const Divider(indent: 5, endIndent: 5),
+              const HomeScreenIconWidget(
+                icon: Icons.calendar_month_sharp,
+                title: '近期的活動',
+              ),
+              Scrollbar(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      ...currentEventList.map(
+                        (toElement) {
+                          return CurrentEventCart(
+                            event: toElement,
+                            eventList: widget.eventList,
+                            keep: widget.keep,
+                            favoriteEventList: widget.favoriteEventList,
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  ...currentEventList.map(
-                    (toElement) {
-                      return CurrentEventCart(
-                        event: toElement,
-                        eventList: widget.eventList,
-                        keep: widget.keep,
-                        favoriteEventList: widget.favoriteEventList,
-                      );
-                    },
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 0),
+                          shape: ContinuousRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          foregroundColor: Colors.white,
+                          backgroundColor: Colors.blue),
+                      onPressed: widget.navigateToEventPage,
+                      child: const Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text('更多活動'),
+                          Icon(Icons.arrow_forward_ios_outlined, size: 15),
+                        ],
+                      ),
+                    ),
                   ),
                 ],
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 0),
-                        shape: ContinuousRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        foregroundColor: Colors.white,
-                        backgroundColor: Colors.blue),
-                    onPressed: widget.navigateToEventPage,
-                    child: const Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text('更多活動'),
-                        Icon(Icons.arrow_forward_ios_outlined, size: 15),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const Divider(indent: 5, endIndent: 5),
-          ],
+              const Divider(indent: 5, endIndent: 5),
+              // TableCalendar(
+              //     focusedDay: DateTime.now(),
+              //     firstDay: DateTime(DateTime.now().year - 10),
+              //     lastDay: DateTime(DateTime.now().year + 10)),
+            ],
+          ),
         ),
       ),
     );
