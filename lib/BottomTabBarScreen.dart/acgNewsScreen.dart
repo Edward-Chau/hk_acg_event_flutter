@@ -17,8 +17,17 @@ class _AcgnewsscreenState extends State<Acgnewsscreen> {
         foregroundColor: Colors.white,
         backgroundColor: ETAColors.appbarColors_01,
       ),
-      body: Container(
+      body: Container(width: double.infinity,
         color: ETAColors.screenBackgroundColor,
+        child: const Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: EdgeInsets.all(15),
+              child: Text('沒有任何新消息'),
+            ),
+          ],
+        ),
       ),
     );
   }

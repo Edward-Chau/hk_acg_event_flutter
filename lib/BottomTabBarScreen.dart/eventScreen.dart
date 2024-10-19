@@ -4,6 +4,7 @@ import 'package:hk_acg_event_information/EventCategoryScreen.dart/allCategory.da
 import 'package:hk_acg_event_information/EventCategoryScreen.dart/comicMarketScreen.dart';
 import 'package:hk_acg_event_information/EventCategoryScreen.dart/electronicMusicScreen.dart';
 import 'package:hk_acg_event_information/EventCategoryScreen.dart/onlyScreen.dart';
+import 'package:hk_acg_event_information/Screen/eventCalendarScreen.dart';
 import 'package:hk_acg_event_information/Screen/favouriteScreen.dart';
 import 'package:hk_acg_event_information/model/ETAColor.dart';
 import 'package:hk_acg_event_information/model/EventModel.dart';
@@ -33,6 +34,18 @@ class _EventscreenState extends State<Eventscreen> {
           title: const Text('活動消息'),
           actions: [
             IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {return
+                        const EventCalendarScreen();
+                      },
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.calendar_month)),
+            IconButton(
               onPressed: () {
                 Navigator.push(
                   context,
@@ -48,10 +61,10 @@ class _EventscreenState extends State<Eventscreen> {
                 );
               }, //OpenFavouriteScreen
               icon: const Icon(
-                Icons.event_available,
-                color: Colors.white,
+                Icons.bookmark,
               ),
-            )
+            ),
+            const SizedBox(width: 5)
           ],
           foregroundColor: Colors.white,
           backgroundColor: ETAColors.appbarColors_01,

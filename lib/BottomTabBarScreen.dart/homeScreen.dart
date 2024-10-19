@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:hk_acg_event_information/Widget/DoujinshiCard.dart';
 import 'package:hk_acg_event_information/Widget/EventListTileCard.dart';
 import 'package:hk_acg_event_information/Widget/currentEventCart.dart';
 import 'package:hk_acg_event_information/Widget/homeScreenIconWidget.dart';
+import 'package:hk_acg_event_information/model/DoujinshiModel.dart';
 import 'package:hk_acg_event_information/model/ETAColor.dart';
 import 'package:hk_acg_event_information/model/EventModel.dart';
-import 'package:table_calendar/table_calendar.dart';
 
 class Homescreen extends StatefulWidget {
   const Homescreen(
@@ -25,6 +26,24 @@ class Homescreen extends StatefulWidget {
 class _HomescreenState extends State<Homescreen> {
   Widget space10 = const SizedBox(height: 10);
   Widget space15 = const SizedBox(height: 15);
+
+  Doujinshimodel doujinshimodel_01 = Doujinshimodel(
+    bookURL: 'https://forum.gamer.com.tw/Co.php?bsn=43473&sn=91071',
+    bookName: 'bookName',
+    imageUrl:
+        'https://live.staticflickr.com/65535/54068555853_3ebba331f4_o.png',
+    summary: [
+      '以長夢與對巨人結局的理解與感情為主題的衍生創作。',
+      '~本篇34頁漫畫完稿版已全公開~',
+      '現階段離實體本完工還有段距離，歡迎大家可以先讀看看內容',
+      '※實體本預購相關事宜會在封面跟插圖一切都弄好準備送印的階段才開始。',
+    ],
+    information: BookInformation(
+      pages: 38,
+      date: DateTime(2024, 10, 15),
+    ),
+    animename: '進撃的巨人',
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -107,10 +126,70 @@ class _HomescreenState extends State<Homescreen> {
                 ],
               ),
               const Divider(indent: 5, endIndent: 5),
-              TableCalendar(
-                  focusedDay: DateTime.now(),
-                  firstDay: DateTime(DateTime.now().year - 10),
-                  lastDay: DateTime(DateTime.now().year + 10)),
+              const HomeScreenIconWidget(
+                icon: Icons.collections_bookmark_outlined,
+                title: '最新登錄同人誌',
+              ),
+              space10,
+              GridView.count(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                childAspectRatio: 2 / 3,
+                mainAxisSpacing: 10,
+                crossAxisSpacing: 10,
+                shrinkWrap: true,
+                primary: false,
+                crossAxisCount: 3,
+                children: [
+                  Doujinshicard(doujinshi: doujinshimodel_01),
+                  Doujinshicard(doujinshi: doujinshimodel_01),
+                  Doujinshicard(doujinshi: doujinshimodel_01),
+                  Doujinshicard(doujinshi: doujinshimodel_01),
+                  Doujinshicard(doujinshi: doujinshimodel_01),
+                  Doujinshicard(doujinshi: doujinshimodel_01),
+                ],
+              ),
+
+              // Wrap(
+              //   children: [
+              //     Doujinshicard(doujinshi: doujinshimodel_01),
+              //     Doujinshicard(doujinshi: doujinshimodel_01),
+              //     Doujinshicard(doujinshi: doujinshimodel_01),
+              //     Doujinshicard(doujinshi: doujinshimodel_01),
+              //     Doujinshicard(doujinshi: doujinshimodel_01),
+              //     Doujinshicard(doujinshi: doujinshimodel_01),
+
+              //   ],
+              // ),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 0),
+                          shape: ContinuousRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          foregroundColor: Colors.white,
+                          backgroundColor: Colors.blue),
+                      onPressed: () {},
+                      child: const Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text('更多同人誌'),
+                          Icon(Icons.arrow_forward_ios_outlined, size: 15),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const Divider(indent: 5, endIndent: 5),
+              space15
             ],
           ),
         ),

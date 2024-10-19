@@ -36,9 +36,11 @@ class _BottomNavigationTabBarState extends State<BottomNavigationTabBar> {
       }
     }
 
-    void navigateToEventPage() {setState(() {
-      selectedPage=1;
-    });}
+    void navigateToEventPage() {
+      setState(() {
+        selectedPage = 1;
+      });
+    }
 
     List<Widget> showPage = [
       Homescreen(
