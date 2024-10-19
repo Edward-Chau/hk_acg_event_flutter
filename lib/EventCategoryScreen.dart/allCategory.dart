@@ -8,10 +8,12 @@ class Allcategory extends StatefulWidget {
       {required this.eventList,
       super.key,
       required this.keep,
-      required this.favoriteEventList});
+      required this.favoriteEventList,
+      required this.pushInformationScreen});
   final List<Event> eventList;
   final List<Event> favoriteEventList;
   final Function(Event) keep;
+  final Function() pushInformationScreen;
   @override
   State<Allcategory> createState() => _AllcategoryState();
 }
@@ -26,6 +28,7 @@ class _AllcategoryState extends State<Allcategory> {
           itemCount: widget.eventList.length,
           itemBuilder: (context, index) {
             return EventListtilecard(
+              pushInformationScreen: widget.pushInformationScreen,
               event: widget.eventList[index],
               favoriteEventList: widget.favoriteEventList,
               keep: widget.keep,

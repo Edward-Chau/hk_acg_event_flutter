@@ -17,13 +17,14 @@ class Informationscreen extends StatefulWidget {
     required this.time,
     required this.keep,
     required this.favoriteEventList,
-    required this.eventList,
+    required this.eventList, required this.pushInformationScreen,
   });
   final Event event;
   final String time;
   final Function(Event) keep;
   final List<Event> favoriteEventList;
   final List<Event> eventList;
+  final Function() pushInformationScreen;
 
   @override
   State<Informationscreen> createState() => _InformationscreenState();
@@ -49,7 +50,7 @@ class _InformationscreenState extends State<Informationscreen> {
                     showDialog(
                       context: context,
                       builder: (context) {
-                        return KeepLog(
+                        return KeepLog(pushInformationScreen: widget.pushInformationScreen,
                           titleMessage: "已移除標記活動",
                           eventName: widget.event.title,
                           favoriteEventList: widget.favoriteEventList,
@@ -62,7 +63,7 @@ class _InformationscreenState extends State<Informationscreen> {
                     showDialog(
                       context: context,
                       builder: (context) {
-                        return KeepLog(
+                        return KeepLog(pushInformationScreen: widget.pushInformationScreen,
                           titleMessage: "已標記活動",
                           eventName: widget.event.title,
                           favoriteEventList: widget.favoriteEventList,
@@ -255,13 +256,13 @@ class KeepLog extends StatefulWidget {
       required this.titleMessage,
       required this.keep,
       required this.favoriteEventList,
-      required this.eventList});
+      required this.eventList, required this.pushInformationScreen});
   final String titleMessage;
   final String eventName;
   final Function(Event) keep;
   final List<Event> favoriteEventList;
   final List<Event> eventList;
-
+final Function() pushInformationScreen;
   @override
   State<KeepLog> createState() => _KeepLogState();
 }
@@ -279,7 +280,7 @@ class _KeepLogState extends State<KeepLog> {
               Navigator.pop(context);
               Navigator.push(context, MaterialPageRoute(
                 builder: (context) {
-                  return FavouriteScreen(
+                  return FavouriteScreen(pushInformationScreen: widget.pushInformationScreen,
                     favoriteEvent: widget.favoriteEventList,
                     keep: widget.keep,
                     eventList: widget.eventList,

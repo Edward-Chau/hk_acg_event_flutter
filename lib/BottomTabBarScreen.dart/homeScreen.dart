@@ -13,11 +13,13 @@ class Homescreen extends StatefulWidget {
       required this.eventList,
       required this.favoriteEventList,
       required this.keep,
-      required this.navigateToEventPage});
+      required this.navigateToEventPage,
+      required this.pushInformationScreen});
   final List<Event> eventList;
   final List<Event> favoriteEventList;
   final Function(Event) keep;
   final void Function() navigateToEventPage;
+  final Function() pushInformationScreen;
 
   @override
   State<Homescreen> createState() => _HomescreenState();
@@ -69,6 +71,7 @@ class _HomescreenState extends State<Homescreen> {
                 title: '即將舉辦的活動',
               ),
               EventListtilecard(
+                  pushInformationScreen: widget.pushInformationScreen,
                   event: widget.eventList[0],
                   keep: widget.keep,
                   favoriteEventList: widget.favoriteEventList,
@@ -87,6 +90,7 @@ class _HomescreenState extends State<Homescreen> {
                       ...currentEventList.map(
                         (toElement) {
                           return CurrentEventCart(
+                            pushInformationScreen: widget.pushInformationScreen,
                             event: toElement,
                             eventList: widget.eventList,
                             keep: widget.keep,

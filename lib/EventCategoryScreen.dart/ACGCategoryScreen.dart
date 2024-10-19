@@ -7,9 +7,10 @@ class ACGCategoryScreen extends StatefulWidget {
       {super.key,
       required this.eventList,
       required this.favoriteEventList,
-      required this.keep});
+      required this.keep, required this.pushInformationScreen});
   final List<Event> eventList;
   final List<Event> favoriteEventList;
+  final Function() pushInformationScreen;
   final Function(Event) keep;
 
   @override
@@ -28,7 +29,7 @@ class _ACGCategoryScreenState extends State<ACGCategoryScreen> {
       child: ListView.builder(
         itemCount: filterList.length,
         itemBuilder: (context, index) {
-          return EventListtilecard(
+          return EventListtilecard(pushInformationScreen: widget.pushInformationScreen,
             event: filterList[index],
             keep: widget.keep,
             favoriteEventList: widget.favoriteEventList,

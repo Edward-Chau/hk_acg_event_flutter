@@ -14,12 +14,13 @@ class CurrentEventCart extends StatelessWidget {
       required this.event,
       required this.keep,
       required this.favoriteEventList,
-      required this.eventList});
+      required this.eventList, required this.pushInformationScreen});
   final Event event;
 
   final Function(Event) keep;
   final List<Event> favoriteEventList;
   final List<Event> eventList;
+  final Function() pushInformationScreen;
   @override
   Widget build(BuildContext context) {
     final String eventTime = format.format(event.dateStart[0]) ==
@@ -35,7 +36,7 @@ class CurrentEventCart extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) {
-                return Informationscreen(
+                return Informationscreen(pushInformationScreen: pushInformationScreen,
                     event: event,
                     time: eventTime,
                     keep: keep,

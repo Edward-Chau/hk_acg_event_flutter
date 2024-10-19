@@ -8,10 +8,11 @@ class FavouriteScreen extends StatefulWidget {
       {required this.favoriteEvent,
       super.key,
       required this.keep,
-      required this.eventList});
+      required this.eventList, required this.pushInformationScreen});
   final List<Event> eventList;
   final List<Event> favoriteEvent;
   final Function(Event) keep;
+  final Function() pushInformationScreen;
   @override
   State<FavouriteScreen> createState() => _FavouriteScreenState();
 }
@@ -48,7 +49,7 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                     shrinkWrap: true,
                     itemCount: widget.favoriteEvent.length,
                     itemBuilder: (context, index) {
-                      return EventListtilecard(
+                      return EventListtilecard(pushInformationScreen: widget.pushInformationScreen,
                         event: widget.favoriteEvent[index],
                         favoriteEventList: widget.favoriteEvent,
                         keep: widget.keep,

@@ -7,10 +7,13 @@ class ComicMarketScreen extends StatefulWidget {
       {super.key,
       required this.eventList,
       required this.favoriteEventList,
-      required this.keep});
+      required this.keep,
+      required this.pushInformationScreen});
   final List<Event> eventList;
   final List<Event> favoriteEventList;
   final Function(Event) keep;
+  final Function() pushInformationScreen;
+
   @override
   State<ComicMarketScreen> createState() => _ComicMarketScreenState();
 }
@@ -28,6 +31,7 @@ class _ComicMarketScreenState extends State<ComicMarketScreen> {
         itemCount: filterList.length,
         itemBuilder: (context, index) {
           return EventListtilecard(
+            pushInformationScreen: widget.pushInformationScreen,
             event: filterList[index],
             keep: widget.keep,
             favoriteEventList: widget.favoriteEventList,

@@ -14,10 +14,12 @@ class Eventscreen extends StatefulWidget {
       {required this.eventList,
       super.key,
       required this.keep,
-      required this.favoriteEvent});
+      required this.favoriteEvent,
+      required this.pushInformationScreen});
   final List<Event> eventList;
   final Function(Event) keep;
   final List<Event> favoriteEvent;
+  final Function() pushInformationScreen;
   @override
   State<Eventscreen> createState() => _EventscreenState();
 }
@@ -38,8 +40,8 @@ class _EventscreenState extends State<Eventscreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) {return
-                        const EventCalendarScreen();
+                      builder: (context) {
+                        return const EventCalendarScreen();
                       },
                     ),
                   );
@@ -52,6 +54,7 @@ class _EventscreenState extends State<Eventscreen> {
                   MaterialPageRoute(
                     builder: (context) {
                       return FavouriteScreen(
+                        pushInformationScreen: widget.pushInformationScreen,
                         favoriteEvent: widget.favoriteEvent,
                         keep: widget.keep,
                         eventList: widget.eventList,
@@ -83,16 +86,19 @@ class _EventscreenState extends State<Eventscreen> {
         body: TabBarView(
           children: [
             Allcategory(
+              pushInformationScreen: widget.pushInformationScreen,
               eventList: widget.eventList,
               keep: widget.keep,
               favoriteEventList: widget.favoriteEvent,
             ), //1
             ACGCategoryScreen(
+              pushInformationScreen: widget.pushInformationScreen,
               eventList: widget.eventList,
               keep: widget.keep,
               favoriteEventList: widget.favoriteEvent,
             ), //2
             ComicMarketScreen(
+              pushInformationScreen: widget.pushInformationScreen,
               eventList: widget.eventList,
               keep: widget.keep,
               favoriteEventList: widget.favoriteEvent,
@@ -103,6 +109,7 @@ class _EventscreenState extends State<Eventscreen> {
               favoriteEventList: widget.favoriteEvent,
             ),
             ElectronicmusicScreen(
+              pushInformationScreen: widget.pushInformationScreen,
               eventList: widget.eventList,
               keep: widget.keep,
               favoriteEventList: widget.favoriteEvent,

@@ -36,6 +36,7 @@ class _BottomNavigationTabBarState extends State<BottomNavigationTabBar> {
       }
     }
 
+   
     void navigateToEventPage() {
       setState(() {
         selectedPage = 1;
@@ -43,13 +44,13 @@ class _BottomNavigationTabBarState extends State<BottomNavigationTabBar> {
     }
 
     List<Widget> showPage = [
-      Homescreen(
+      Homescreen(pushInformationScreen: (){},
         eventList: eventList,
         favoriteEventList: favoriteEvent,
         keep: keep,
         navigateToEventPage: navigateToEventPage,
       ), //首頁
-      Eventscreen(
+      Eventscreen(pushInformationScreen: (){},
         eventList: eventList,
         keep: keep,
         favoriteEvent: favoriteEvent,

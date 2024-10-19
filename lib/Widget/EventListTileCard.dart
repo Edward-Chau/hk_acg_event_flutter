@@ -13,11 +13,13 @@ class EventListtilecard extends StatefulWidget {
       super.key,
       required this.keep,
       required this.favoriteEventList,
-      required this.eventList});
+      required this.eventList,
+      required this.pushInformationScreen});
   final Event event;
   final Function(Event) keep;
   final List<Event> favoriteEventList;
   final List<Event> eventList;
+  final Function() pushInformationScreen;
 
   @override
   State<EventListtilecard> createState() => _EventListtilecardState();
@@ -37,11 +39,13 @@ class _EventListtilecardState extends State<EventListtilecard> {
         decoration: const BoxDecoration(color: Colors.white),
         child: ListTile(
           onTap: () {
+            widget.pushInformationScreen;
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) {
                   return Informationscreen(
+                    pushInformationScreen: widget.pushInformationScreen,
                     event: widget.event,
                     time: eventTime,
                     favoriteEventList: widget.favoriteEventList,

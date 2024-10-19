@@ -24,7 +24,7 @@ class _OnlyScreenState extends State<OnlyScreen> {
       child: ListView.builder(
         itemCount: filterList.length,
         itemBuilder: (context, index) {
-          return EventListtilecard(
+          return EventListtilecard(pushInformationScreen: (){},
             event: filterList[index],
             keep: widget.keep,
             favoriteEventList: widget.favoriteEventList,
