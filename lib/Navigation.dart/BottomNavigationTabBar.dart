@@ -18,10 +18,12 @@ List<Event> favoriteEvent = [];
 class _BottomNavigationTabBarState extends State<BottomNavigationTabBar> {
   @override
   Widget build(BuildContext context) {
-    List<Event> eventList = registeredEvent.where((listItem) {
-      return DateTime.parse(listItem.dateStart[0].toString())
-          .isAfter(DateTime.parse(DateTime.now().toString()));
-    }).toList();
+    List<Event> eventList = registeredEvent;
+
+    //  registeredEvent.where((listItem) {
+    //   return DateTime.parse(listItem.dateStart[0].toString())
+    //       .isAfter(DateTime.parse(DateTime.now().toString()));
+    // }).toList();
 
     void keep(Event eventitem) {
       bool eventexisted = favoriteEvent.contains(eventitem);
@@ -36,7 +38,6 @@ class _BottomNavigationTabBarState extends State<BottomNavigationTabBar> {
       }
     }
 
-   
     void navigateToEventPage() {
       setState(() {
         selectedPage = 1;
@@ -44,13 +45,15 @@ class _BottomNavigationTabBarState extends State<BottomNavigationTabBar> {
     }
 
     List<Widget> showPage = [
-      Homescreen(pushInformationScreen: (){},
+      Homescreen(
+        pushInformationScreen: () {},
         eventList: eventList,
         favoriteEventList: favoriteEvent,
         keep: keep,
         navigateToEventPage: navigateToEventPage,
       ), //首頁
-      Eventscreen(pushInformationScreen: (){},
+      Eventscreen(
+        pushInformationScreen: () {},
         eventList: eventList,
         keep: keep,
         favoriteEvent: favoriteEvent,
