@@ -9,18 +9,12 @@ import 'package:transparent_image/transparent_image.dart';
 var format = DateFormat.yMd();
 
 class CurrentEventCart extends StatelessWidget {
-  const CurrentEventCart(
-      {super.key,
-      required this.event,
-      required this.keep,
-      required this.favoriteEventList,
-      required this.eventList, required this.pushInformationScreen});
+  const CurrentEventCart({
+    super.key,
+    required this.event,
+  });
   final Event event;
 
-  final Function(Event) keep;
-  final List<Event> favoriteEventList;
-  final List<Event> eventList;
-  final Function() pushInformationScreen;
   @override
   Widget build(BuildContext context) {
     final String eventTime = format.format(event.dateStart[0]) ==
@@ -36,12 +30,7 @@ class CurrentEventCart extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) {
-                return Informationscreen(pushInformationScreen: pushInformationScreen,
-                    event: event,
-                    time: eventTime,
-                    keep: keep,
-                    favoriteEventList: favoriteEventList,
-                    eventList: eventList);
+                return Informationscreen(event: event);
               },
             ),
           );

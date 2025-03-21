@@ -18,7 +18,8 @@ var evenCategoryColor = {
 
 class Event {
   const Event(
-      {required this.imageURL,
+      {required this.id,
+      required this.imageURL,
       required this.title,
       required this.dateStart,
       required this.dateEnd,
@@ -28,8 +29,9 @@ class Event {
       required this.organizer,
       required this.officialURL,
       required this.location,
-      required this.information});
+      required this.eventDetail});
 
+  final int id;
   final String imageURL;
   final String title;
   final List<DateTime> dateStart;
@@ -40,5 +42,5 @@ class Event {
   final String organizer;
   final String officialURL;
   final String location;
-  final List<String> information;
+  final String eventDetail;
 }

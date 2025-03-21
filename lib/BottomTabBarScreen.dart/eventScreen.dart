@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hk_acg_event_information/EventCategoryScreen.dart/ACGCategoryScreen.dart';
 import 'package:hk_acg_event_information/EventCategoryScreen.dart/allCategory.dart';
-import 'package:hk_acg_event_information/EventCategoryScreen.dart/comicMarketScreen.dart';
-import 'package:hk_acg_event_information/EventCategoryScreen.dart/electronicMusicScreen.dart';
-import 'package:hk_acg_event_information/EventCategoryScreen.dart/onlyScreen.dart';
 import 'package:hk_acg_event_information/Screen/eventCalendarScreen.dart';
 import 'package:hk_acg_event_information/Screen/favouriteScreen.dart';
 import 'package:hk_acg_event_information/model/ETAColor.dart';
@@ -90,25 +87,20 @@ class _EventscreenState extends State<Eventscreen> {
               eventList: widget.eventList,
               keep: widget.keep,
               favoriteEventList: widget.favoriteEvent,
-            ), //1
-            ACGCategoryScreen(
-              pushInformationScreen: widget.pushInformationScreen,
-              eventList: widget.eventList,
-              keep: widget.keep,
-              favoriteEventList: widget.favoriteEvent,
-            ), //2
-            ComicMarketScreen(
+            ),
+            Allcategory(
               pushInformationScreen: widget.pushInformationScreen,
               eventList: widget.eventList,
               keep: widget.keep,
               favoriteEventList: widget.favoriteEvent,
             ),
-            OnlyScreen(
+            Allcategory(
+              pushInformationScreen: widget.pushInformationScreen,
               eventList: widget.eventList,
               keep: widget.keep,
               favoriteEventList: widget.favoriteEvent,
             ),
-            ElectronicmusicScreen(
+            Allcategory(
               pushInformationScreen: widget.pushInformationScreen,
               eventList: widget.eventList,
               keep: widget.keep,

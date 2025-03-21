@@ -28,11 +28,7 @@ class _AllcategoryState extends State<Allcategory> {
           itemCount: widget.eventList.length,
           itemBuilder: (context, index) {
             return EventListtilecard(
-              pushInformationScreen: widget.pushInformationScreen,
               event: widget.eventList[index],
-              favoriteEventList: widget.favoriteEventList,
-              keep: widget.keep,
-              eventList: widget.eventList,
             );
           },
         ),

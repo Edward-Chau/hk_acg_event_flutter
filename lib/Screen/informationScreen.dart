@@ -14,17 +14,8 @@ class Informationscreen extends StatefulWidget {
   const Informationscreen({
     super.key,
     required this.event,
-    required this.time,
-    required this.keep,
-    required this.favoriteEventList,
-    required this.eventList, required this.pushInformationScreen,
   });
   final Event event;
-  final String time;
-  final Function(Event) keep;
-  final List<Event> favoriteEventList;
-  final List<Event> eventList;
-  final Function() pushInformationScreen;
 
   @override
   State<Informationscreen> createState() => _InformationscreenState();
@@ -42,52 +33,11 @@ class _InformationscreenState extends State<Informationscreen> {
       appBar: AppBar(
         actions: [
           IconButton(
-            onPressed: () {
-              setState(
-                () {
-                  //fuction
-                  if (widget.favoriteEventList.contains(widget.event)) {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return KeepLog(pushInformationScreen: widget.pushInformationScreen,
-                          titleMessage: "已移除標記活動",
-                          eventName: widget.event.title,
-                          favoriteEventList: widget.favoriteEventList,
-                          keep: widget.keep,
-                          eventList: widget.eventList,
-                        );
-                      },
-                    );
-                  } else {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return KeepLog(pushInformationScreen: widget.pushInformationScreen,
-                          titleMessage: "已標記活動",
-                          eventName: widget.event.title,
-                          favoriteEventList: widget.favoriteEventList,
-                          keep: widget.keep,
-                          eventList: widget.eventList,
-                        );
-                      },
-                    );
-                  }
-
-                  widget.keep(widget.event);
-                },
-              );
-            },
-            icon: widget.favoriteEventList.contains(widget.event)
-                ? const Icon(
-                    Icons.favorite,
-                    color: Colors.red,
-                  )
-                : const Icon(
-                    Icons.favorite,
-                    color: Colors.grey,
-                  ),
-          ),
+              onPressed: () {},
+              icon: const Icon(
+                Icons.favorite,
+                color: Colors.red,
+              )),
         ],
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -100,7 +50,7 @@ class _InformationscreenState extends State<Informationscreen> {
                   .copyWith(color: Colors.white, fontSize: 18),
             ),
             Text(
-              widget.time,
+              ' widget.time',
               style: Theme.of(context)
                   .textTheme
                   .titleSmall!
@@ -234,9 +184,7 @@ class _InformationscreenState extends State<Informationscreen> {
                       dividerTitle: '活動資訊',
                     ),
                     space,
-                    ...widget.event.information.map((toElement) {
-                      return Text(toElement);
-                    }),
+                    Text(widget.event.eventDetail),
                     const SizedBox(height: 30) //end space
                   ],
                 ),
@@ -256,13 +204,14 @@ class KeepLog extends StatefulWidget {
       required this.titleMessage,
       required this.keep,
       required this.favoriteEventList,
-      required this.eventList, required this.pushInformationScreen});
+      required this.eventList,
+      required this.pushInformationScreen});
   final String titleMessage;
   final String eventName;
   final Function(Event) keep;
   final List<Event> favoriteEventList;
   final List<Event> eventList;
-final Function() pushInformationScreen;
+  final Function() pushInformationScreen;
   @override
   State<KeepLog> createState() => _KeepLogState();
 }
@@ -280,7 +229,8 @@ class _KeepLogState extends State<KeepLog> {
               Navigator.pop(context);
               Navigator.push(context, MaterialPageRoute(
                 builder: (context) {
-                  return FavouriteScreen(pushInformationScreen: widget.pushInformationScreen,
+                  return FavouriteScreen(
+                    pushInformationScreen: widget.pushInformationScreen,
                     favoriteEvent: widget.favoriteEventList,
                     keep: widget.keep,
                     eventList: widget.eventList,

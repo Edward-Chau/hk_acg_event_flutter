@@ -18,7 +18,7 @@ List<Event> favoriteEvent = [];
 class _BottomNavigationTabBarState extends State<BottomNavigationTabBar> {
   @override
   Widget build(BuildContext context) {
-    List<Event> eventList = registeredEvent;
+    // List<Event> eventList = registeredEvent;
 
     //  registeredEvent.where((listItem) {
     //   return DateTime.parse(listItem.dateStart[0].toString())
@@ -46,15 +46,11 @@ class _BottomNavigationTabBarState extends State<BottomNavigationTabBar> {
 
     List<Widget> showPage = [
       Homescreen(
-        pushInformationScreen: () {},
-        eventList: eventList,
-        favoriteEventList: favoriteEvent,
-        keep: keep,
         navigateToEventPage: navigateToEventPage,
       ), //首頁
       Eventscreen(
         pushInformationScreen: () {},
-        eventList: eventList,
+        eventList: [],
         keep: keep,
         favoriteEvent: favoriteEvent,
       ), //活動

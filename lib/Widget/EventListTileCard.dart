@@ -8,18 +8,11 @@ import 'package:transparent_image/transparent_image.dart';
 var format = DateFormat.yMd();
 
 class EventListtilecard extends StatefulWidget {
-  const EventListtilecard(
-      {required this.event,
-      super.key,
-      required this.keep,
-      required this.favoriteEventList,
-      required this.eventList,
-      required this.pushInformationScreen});
+  const EventListtilecard({
+    required this.event,
+    super.key,
+  });
   final Event event;
-  final Function(Event) keep;
-  final List<Event> favoriteEventList;
-  final List<Event> eventList;
-  final Function() pushInformationScreen;
 
   @override
   State<EventListtilecard> createState() => _EventListtilecardState();
@@ -39,18 +32,12 @@ class _EventListtilecardState extends State<EventListtilecard> {
         decoration: const BoxDecoration(color: Colors.white),
         child: ListTile(
           onTap: () {
-            widget.pushInformationScreen;
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) {
                   return Informationscreen(
-                    pushInformationScreen: widget.pushInformationScreen,
                     event: widget.event,
-                    time: eventTime,
-                    favoriteEventList: widget.favoriteEventList,
-                    keep: widget.keep,
-                    eventList: widget.eventList,
                   );
                 },
               ),
@@ -71,13 +58,11 @@ class _EventListtilecardState extends State<EventListtilecard> {
                     .copyWith(fontWeight: FontWeight.bold),
               ),
               const Spacer(),
-              widget.favoriteEventList.contains(widget.event)
-                  ? const Icon(
-                      Icons.favorite,
-                      color: Colors.red,
-                      size: 20,
-                    )
-                  : const Text(""), //check if item in favoriteEventList?
+              // const Icon(
+              //   Icons.favorite,
+              //   color: Colors.red,
+              //   size: 20,
+              // )
             ],
           ),
           subtitle: Padding(
