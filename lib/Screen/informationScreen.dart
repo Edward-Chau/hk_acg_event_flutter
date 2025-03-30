@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hk_acg_event_information/Screen/favouriteScreen.dart';
 import 'package:hk_acg_event_information/Widget/DividerSpece.dart';
 import 'package:hk_acg_event_information/Widget/eventCategoryLabel.dart';
 import 'package:hk_acg_event_information/model/ETAColor.dart';
 import 'package:hk_acg_event_information/model/EventModel.dart';
+import 'package:hk_acg_event_information/provider/keep_event_provider.dart';
 import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:intl/intl.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class Informationscreen extends StatefulWidget {
+class Informationscreen extends ConsumerStatefulWidget {
   const Informationscreen({
     super.key,
     required this.event,
@@ -18,26 +21,34 @@ class Informationscreen extends StatefulWidget {
   final Event event;
 
   @override
-  State<Informationscreen> createState() => _InformationscreenState();
+  ConsumerState<Informationscreen> createState() => _InformationscreenState();
 }
 
 var format = DateFormat.yMd();
 // var formatTime=DateFormat.ymd
 
-class _InformationscreenState extends State<Informationscreen> {
+class _InformationscreenState extends ConsumerState<Informationscreen> {
   Widget space = const SizedBox(height: 15);
 
   @override
   Widget build(BuildContext context) {
+    final List<int> keepList = ref.watch(keepEventProviderProvider);
     return Scaffold(
       appBar: AppBar(
         actions: [
           IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.favorite,
-                color: Colors.red,
-              )),
+            onPressed: () {
+              ref
+                  .read(keepEventProviderProvider.notifier)
+                  .toggleKeep(widget.event.id);
+            },
+            icon: Icon(
+              Icons.favorite,
+              color: keepList.contains(widget.event.id)
+                  ? Colors.red
+                  : Colors.white,
+            ),
+          ),
         ],
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,6 +86,10 @@ class _InformationscreenState extends State<Informationscreen> {
                     placeholder: kTransparentImage,
                     image: widget.event.imageURL,
                     fit: BoxFit.contain,
+                    imageErrorBuilder: (context, error, stackTrace) =>
+                        const Center(
+                      child: Text('error'),
+                    ),
                   ),
                 ),
               ),
@@ -106,12 +121,12 @@ class _InformationscreenState extends State<Informationscreen> {
                     Text(widget.event.organizer),
                     space,
                     const Text('時間', style: TextStyle(color: Colors.grey)),
-                    Text(
-                      format.format(widget.event.dateStart[0]) ==
-                              format.format(widget.event.dateStart.last)
-                          ? format.format(widget.event.dateStart[0])
-                          : '${format.format(widget.event.dateStart[0])} ~ ${format.format(widget.event.dateEnd.last)}',
-                    ),
+                    Text('WIP'
+                        // format.format(widget.event.dateStart[0]) ==
+                        //         format.format(widget.event.dateStart.last)
+                        //     ? format.format(widget.event.dateStart[0])
+                        //     : '${format.format(widget.event.dateStart[0])} ~ ${format.format(widget.event.dateEnd.last)}',
+                        ),
                     space,
                     const Text('會場', style: TextStyle(color: Colors.grey)),
                     InkWell(
@@ -184,7 +199,7 @@ class _InformationscreenState extends State<Informationscreen> {
                       dividerTitle: '活動資訊',
                     ),
                     space,
-                    Text(widget.event.eventDetail),
+                    Html(data: widget.event.eventDetail),
                     const SizedBox(height: 30) //end space
                   ],
                 ),
@@ -229,12 +244,7 @@ class _KeepLogState extends State<KeepLog> {
               Navigator.pop(context);
               Navigator.push(context, MaterialPageRoute(
                 builder: (context) {
-                  return FavouriteScreen(
-                    pushInformationScreen: widget.pushInformationScreen,
-                    favoriteEvent: widget.favoriteEventList,
-                    keep: widget.keep,
-                    eventList: widget.eventList,
-                  );
+                  return const FavouriteScreen();
                 },
               ));
             },

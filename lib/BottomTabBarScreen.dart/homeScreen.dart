@@ -30,13 +30,15 @@ class _HomescreenState extends ConsumerState<Homescreen> {
     final bool isLoading = ref.watch(eventListProvider).isLoading;
     final List<Event> eventList = ref.watch(eventListProvider).eventList;
 
-    // final currentEventList = eventList.sublist(1, 5); //4 item
+    final currentEventList =
+        eventList.length < 5 ? eventList : eventList.sublist(1, 5); //4 item
+
     return Scaffold(
-      backgroundColor: ETAColors.screenBackgroundColor,
       appBar: AppBar(
-        foregroundColor: Colors.white,
         title: const Text('香港動漫資訊'),
-        backgroundColor: ETAColors.appbarColors_01,
+        actions: [
+          IconButton(onPressed: () {}, icon: const Icon(Icons.notifications))
+        ],
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -78,7 +80,7 @@ class _HomescreenState extends ConsumerState<Homescreen> {
                         scrollDirection: Axis.horizontal,
                         child: Row(
                           children: [
-                            ...eventList.map(
+                            ...currentEventList.map(
                               (toElement) {
                                 return CurrentEventCart(
                                   event: toElement,

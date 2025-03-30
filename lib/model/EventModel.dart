@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-enum EvenCategory { acg, comicMarket, only, electronicMusic }
+import 'package:hk_acg_event_information/model/enumCategory.dart';
 
 var evenCategoryChineseName = {
   EvenCategory.acg: "動漫展",
@@ -21,8 +20,9 @@ class Event {
       {required this.id,
       required this.imageURL,
       required this.title,
-      required this.dateStart,
-      required this.dateEnd,
+      // required this.dateStart,
+      // required this.dateEnd,
+      required this.date,
       required this.ticket,
       required this.amount,
       required this.evenCategory,
@@ -34,9 +34,8 @@ class Event {
   final int id;
   final String imageURL;
   final String title;
-  final List<DateTime> dateStart;
-  final List<DateTime> dateEnd;
-  final String ticket;
+  final List<DateTime> date;
+  final double ticket;
   final List<String> amount;
   final EvenCategory evenCategory;
   final String organizer;
@@ -44,3 +43,9 @@ class Event {
   final String location;
   final String eventDetail;
 }
+
+
+// final List<> eventDate;
+
+
+// class EventDate

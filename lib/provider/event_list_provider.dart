@@ -9,10 +9,10 @@ class EventListNotifier extends StateNotifier<ProvideEventClass> {
     getEventList();
   }
 
-  getEventList() {
+  getEventList() async {
     state = ProvideEventClass(
       isLoading: false,
-      eventList: ProvideData.getEventList(),
+      eventList: await ProvideData.getEventList(),
     );
   }
 
@@ -35,7 +35,10 @@ final eventListProvider =
 });
 
 class ProvideEventClass {
-  const ProvideEventClass({required this.isLoading, required this.eventList});
+  const ProvideEventClass({
+    this.isLoading = true,
+    required this.eventList,
+  });
 
   final bool isLoading;
   final List<Event> eventList;

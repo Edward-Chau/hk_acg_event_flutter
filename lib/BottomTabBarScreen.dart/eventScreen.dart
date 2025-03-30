@@ -3,20 +3,14 @@ import 'package:hk_acg_event_information/EventCategoryScreen.dart/ACGCategoryScr
 import 'package:hk_acg_event_information/EventCategoryScreen.dart/allCategory.dart';
 import 'package:hk_acg_event_information/Screen/eventCalendarScreen.dart';
 import 'package:hk_acg_event_information/Screen/favouriteScreen.dart';
+import 'package:hk_acg_event_information/Widget/eventCategoryLabel.dart';
 import 'package:hk_acg_event_information/model/ETAColor.dart';
 import 'package:hk_acg_event_information/model/EventModel.dart';
+import 'package:hk_acg_event_information/model/enumCategory.dart';
 
 class Eventscreen extends StatefulWidget {
-  const Eventscreen(
-      {required this.eventList,
-      super.key,
-      required this.keep,
-      required this.favoriteEvent,
-      required this.pushInformationScreen});
-  final List<Event> eventList;
-  final Function(Event) keep;
-  final List<Event> favoriteEvent;
-  final Function() pushInformationScreen;
+  const Eventscreen({super.key});
+
   @override
   State<Eventscreen> createState() => _EventscreenState();
 }
@@ -27,7 +21,7 @@ class _EventscreenState extends State<Eventscreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: EvenCategory.values.length + 1,
+      length: EvenCategory.values.length,
       child: Scaffold(
         appBar: AppBar(
           title: const Text('活動消息'),
@@ -50,12 +44,7 @@ class _EventscreenState extends State<Eventscreen> {
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return FavouriteScreen(
-                        pushInformationScreen: widget.pushInformationScreen,
-                        favoriteEvent: widget.favoriteEvent,
-                        keep: widget.keep,
-                        eventList: widget.eventList,
-                      );
+                      return const FavouriteScreen();
                     },
                   ),
                 );
@@ -66,8 +55,6 @@ class _EventscreenState extends State<Eventscreen> {
             ),
             const SizedBox(width: 5)
           ],
-          foregroundColor: Colors.white,
-          backgroundColor: ETAColors.appbarColors_01,
           bottom: const TabBar(
             labelColor: Colors.white,
             // isScrollable: true,
@@ -76,36 +63,16 @@ class _EventscreenState extends State<Eventscreen> {
               Tab(text: '動漫展'), //2
               Tab(text: '同人展'), //3
               Tab(text: 'only場'), //4
-              Tab(text: '動漫電音節'), //5
+              // Tab(text: '動漫電音節'), //5
             ],
           ),
         ),
-        body: TabBarView(
+        body: const TabBarView(
           children: [
-            Allcategory(
-              pushInformationScreen: widget.pushInformationScreen,
-              eventList: widget.eventList,
-              keep: widget.keep,
-              favoriteEventList: widget.favoriteEvent,
-            ),
-            Allcategory(
-              pushInformationScreen: widget.pushInformationScreen,
-              eventList: widget.eventList,
-              keep: widget.keep,
-              favoriteEventList: widget.favoriteEvent,
-            ),
-            Allcategory(
-              pushInformationScreen: widget.pushInformationScreen,
-              eventList: widget.eventList,
-              keep: widget.keep,
-              favoriteEventList: widget.favoriteEvent,
-            ),
-            Allcategory(
-              pushInformationScreen: widget.pushInformationScreen,
-              eventList: widget.eventList,
-              keep: widget.keep,
-              favoriteEventList: widget.favoriteEvent,
-            ),
+            CategoryScreen(),
+            CategoryScreen(selecedEvenCategory: EvenCategory.acg),
+            CategoryScreen(selecedEvenCategory: EvenCategory.comicMarket),
+            CategoryScreen(selecedEvenCategory: EvenCategory.only),
           ],
         ),
       ),

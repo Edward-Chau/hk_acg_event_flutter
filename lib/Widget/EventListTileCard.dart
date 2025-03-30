@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hk_acg_event_information/Screen/informationScreen.dart';
 import 'package:hk_acg_event_information/Widget/eventCategoryLabel.dart';
 import 'package:hk_acg_event_information/model/EventModel.dart';
+import 'package:hk_acg_event_information/provider/keep_event_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 var format = DateFormat.yMd();
 
-class EventListtilecard extends StatefulWidget {
+class EventListtilecard extends ConsumerStatefulWidget {
   const EventListtilecard({
     required this.event,
     super.key,
@@ -15,16 +17,13 @@ class EventListtilecard extends StatefulWidget {
   final Event event;
 
   @override
-  State<EventListtilecard> createState() => _EventListtilecardState();
+  ConsumerState<EventListtilecard> createState() => _EventListtilecardState();
 }
 
-class _EventListtilecardState extends State<EventListtilecard> {
+class _EventListtilecardState extends ConsumerState<EventListtilecard> {
   @override
   Widget build(BuildContext context) {
-    final String eventTime = format.format(widget.event.dateStart[0]) ==
-            format.format(widget.event.dateStart.last)
-        ? format.format(widget.event.dateStart[0])
-        : '${format.format(widget.event.dateStart[0])} ~ ${format.format(widget.event.dateEnd.last)}';
+    final List<int> keepList = ref.watch(keepEventProviderProvider);
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
@@ -58,11 +57,12 @@ class _EventListtilecardState extends State<EventListtilecard> {
                     .copyWith(fontWeight: FontWeight.bold),
               ),
               const Spacer(),
-              // const Icon(
-              //   Icons.favorite,
-              //   color: Colors.red,
-              //   size: 20,
-              // )
+              if (keepList.contains(widget.event.id))
+                const Icon(
+                  Icons.favorite,
+                  color: Colors.red,
+                  size: 20,
+                )
             ],
           ),
           subtitle: Padding(
@@ -76,6 +76,10 @@ class _EventListtilecardState extends State<EventListtilecard> {
                     placeholder: kTransparentImage,
                     image: widget.event.imageURL,
                     fit: BoxFit.cover,
+                    imageErrorBuilder: (context, error, stackTrace) =>
+                        const Center(
+                      child: Text('error'),
+                    ),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -84,7 +88,7 @@ class _EventListtilecardState extends State<EventListtilecard> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        eventTime,
+                        'eventTime wip',
                         style: TextStyle(color: Colors.blue[700]),
                       ),
                       Text(

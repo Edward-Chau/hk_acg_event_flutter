@@ -1,38 +1,86 @@
+import 'dart:convert';
+
+import 'package:hk_acg_event_information/data/apiClient.dart';
 import 'package:hk_acg_event_information/model/EventModel.dart';
+import 'package:hk_acg_event_information/model/enumCategory.dart';
+import 'package:http/http.dart' as http;
 
 class ProvideData {
-  static getEventList() {
+  static Future<List<Event>> getEventList() async {
+    // var url = Uri.http(Apiclient.api, 'events'); // 確保路徑正確
+    // print(url);
+
+    try {
+      var url = Uri.http(Apiclient.api, 'events'); // 確保路徑正確
+
+      var response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        if (response.statusCode == 200) {
+          List<dynamic> jsonList = jsonDecode(response.body);
+
+          List<Event> returnList = [];
+          for (int i = 0; i < jsonList.length; i++) {
+            final EvenCategory evenCategory = EvenCategory.values.firstWhere(
+              (cat) => cat.name == jsonList[i]['evenCategory'],
+              orElse: () => EvenCategory.acg,
+            );
+
+            final Event getEvent = Event(
+              id: jsonList[i]['eventid'] ?? -1,
+              imageURL: jsonList[i]['imageURL'] ?? 'N/A',
+              title: jsonList[i]['title'] ?? 'N/A',
+              date: [DateTime.now()],
+              ticket: (jsonList[i]['ticket'] as int).toDouble(),
+              amount: ['amount'],
+              evenCategory: evenCategory,
+              organizer: jsonList[i]['organizer'] ?? 'N/A',
+              officialURL: jsonList[i]['officialURL'] ?? 'wip n/a',
+              location: jsonList[i]['location'] ?? 'N/A',
+              eventDetail: jsonList[i]['eventDetail'] ?? '沒有資訊',
+            );
+
+            returnList.add(getEvent);
+          }
+          // return [];
+          return returnList;
+        } else {
+          throw Exception('API 錯誤，狀態碼：${response.statusCode}');
+        }
+      }
+    } catch (e) {
+      throw Exception('獲取活動列表時發生錯誤: $e');
+    }
+
+    // print('Response status: ${response.statusCode}');
+    // print('Response body: ${response.body}');
     return [
-      for (int i = 0; i < 10; i++)
-        Event(
-          id: 1,
-          imageURL: 'https://i.ibb.co/Zgzmjdq/fbthumb.jpg',
-          title: 'Palette Ring 8 綜合同人展',
-          dateStart: [
-            DateTime(2024, 10, 26, 12),
-            DateTime(2024, 10, 27, 12),
-          ],
-          dateEnd: [
-            DateTime(2024, 10, 26, 19),
-            DateTime(2024, 10, 27, 19),
-          ],
-          ticket: '45',
-          amount: [
-            '預售門票發售：10月10日開始',
-            '票價：\$45/日（預售門票至10月25日）',
-            '每次交易可購入其中一天最多4張門票',
-          ],
-          evenCategory: EvenCategory.comicMarket,
-          organizer: 'Palette Ring 綜合同人展委員會',
-          officialURL: 'https://www.palette-ring.com/',
-          location: '麥花臣場館 (九龍旺角奶路臣街 38 號)',
-          eventDetail: 'hello',
-        )
+      // for (int i = 0; i < 10; i++)
+      //   Event(
+      //     id: 1,
+      //     imageURL: 'https://i.ibb.co/Zgzmjdq/fbthumb.jpg',
+      //     title: 'Palette Ring 8 綜合同人展',
+      //     date: [
+      //       DateTime(2024, 10, 26, 19),
+      //       DateTime(2024, 10, 27, 19),
+      //     ],
+      //     ticket: '45',
+      //     amount: [
+      //       '預售門票發售：10月10日開始',
+      //       '票價：\$45/日（預售門票至10月25日）',
+      //       '每次交易可購入其中一天最多4張門票',
+      //     ],
+      //     evenCategory: EvenCategory.comicMarket,
+      //     organizer: 'Palette Ring 綜合同人展委員會',
+      //     officialURL: 'https://www.palette-ring.com/',
+      //     location: '麥花臣場館 (九龍旺角奶路臣街 38 號)',
+      //     eventDetail: 'hello',
+      //   )
     ];
   }
 }
 
-final List<Event> registeredEvent = [
+// final List<Event> registeredEvent = [
   // Event(
   //   id: 1,
   //   imageURL: 'https://i.ibb.co/Zgzmjdq/fbthumb.jpg',
@@ -212,4 +260,4 @@ final List<Event> registeredEvent = [
   //     '2024年未玩夠？等Z plus 為大家plan定 2025年第一個節目喇！Z Plus 將在2025年1月11至12日於安盛 x 竹翠公園 (西九)向大家隆重呈獻全港首個ACG crossover 電音的大型活動 （Z Plus ACGxEDM HK 2025 動漫電音節）！屆時，將邀請多名來自日本、韓國及台灣熱門DJ電音表演，當中包括有DJ Mao、DJ Amber、台灣黑澀會初代成員 - DJ Swallow_嬌、前Kpop 女團成員 - Rana 及來自韓國的DJ Milky等等，更有流行的日系地下偶像團隊和著名Cosplayer為大家帶來青春和流行元素的現場表演，體驗到秋葉原的偶像魅力！現場更有多個遊戲體驗及豐富禮品，保證令你目不暇給！'
   // ],
   // ),
-];
+// ];

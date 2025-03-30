@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:hk_acg_event_information/BottomTabBarScreen.dart/acgNewsScreen.dart';
 import 'package:hk_acg_event_information/BottomTabBarScreen.dart/eventScreen.dart';
 import 'package:hk_acg_event_information/BottomTabBarScreen.dart/homeScreen.dart';
+import 'package:hk_acg_event_information/BottomTabBarScreen.dart/membership_screen.dart';
 import 'package:hk_acg_event_information/data/EventDate.dart';
+import 'package:hk_acg_event_information/model/ETAColor.dart';
 import 'package:hk_acg_event_information/model/EventModel.dart';
 
 class BottomNavigationTabBar extends StatefulWidget {
@@ -18,26 +20,6 @@ List<Event> favoriteEvent = [];
 class _BottomNavigationTabBarState extends State<BottomNavigationTabBar> {
   @override
   Widget build(BuildContext context) {
-    // List<Event> eventList = registeredEvent;
-
-    //  registeredEvent.where((listItem) {
-    //   return DateTime.parse(listItem.dateStart[0].toString())
-    //       .isAfter(DateTime.parse(DateTime.now().toString()));
-    // }).toList();
-
-    void keep(Event eventitem) {
-      bool eventexisted = favoriteEvent.contains(eventitem);
-      if (eventexisted == true) {
-        setState(() {
-          favoriteEvent.remove(eventitem);
-        });
-      } else {
-        setState(() {
-          favoriteEvent.add(eventitem);
-        });
-      }
-    }
-
     void navigateToEventPage() {
       setState(() {
         selectedPage = 1;
@@ -45,20 +27,30 @@ class _BottomNavigationTabBarState extends State<BottomNavigationTabBar> {
     }
 
     List<Widget> showPage = [
-      Homescreen(
-        navigateToEventPage: navigateToEventPage,
-      ), //首頁
-      Eventscreen(
-        pushInformationScreen: () {},
-        eventList: [],
-        keep: keep,
-        favoriteEvent: favoriteEvent,
-      ), //活動
-      const Acgnewsscreen(), //acgnew
+      Homescreen(navigateToEventPage: navigateToEventPage), //首頁
+      const Eventscreen(), //活動
+      const MembershipScreen()
     ]; //navigattionScreen
 
     return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
+      bottomNavigationBar:
+          // NavigationBar(
+          //   backgroundColor: ETAColors.appbarColors_01,
+          //   selectedIndex: selectedPage,
+          //   onDestinationSelected: (value) {
+          //     setState(() {
+          //       selectedPage = value;
+          //     });
+          //   },
+          //   destinations: const [
+          //     NavigationDestination(icon: Icon(Icons.home), label: '首頁'),
+          //     NavigationDestination(icon: Icon(Icons.newspaper), label: '活動'),
+          //     NavigationDestination(icon: Icon(Icons.home), label: '最新消息'),
+          //     NavigationDestination(icon: Icon(Icons.person), label: '會員中心')
+          //   ],
+          // ),
+
+          BottomNavigationBar(
         currentIndex: selectedPage,
         selectedItemColor: Colors.blue,
         onTap: (value) {
@@ -70,8 +62,9 @@ class _BottomNavigationTabBarState extends State<BottomNavigationTabBar> {
         },
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: '首頁'),
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: '活動'),
-          BottomNavigationBarItem(icon: Icon(Icons.newspaper), label: '最新消息')
+          BottomNavigationBarItem(icon: Icon(Icons.newspaper), label: '活動'),
+          // BottomNavigationBarItem(icon: Icon(Icons.newspaper), label: '最新消息'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: '會員中心'),
         ],
       ),
       body: showPage[selectedPage],

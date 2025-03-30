@@ -1,37 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hk_acg_event_information/Widget/EventListTileCard.dart';
 import 'package:hk_acg_event_information/model/ETAColor.dart';
 import 'package:hk_acg_event_information/model/EventModel.dart';
+import 'package:hk_acg_event_information/model/enumCategory.dart';
+import 'package:hk_acg_event_information/provider/event_list_provider.dart';
 
-class Allcategory extends StatefulWidget {
-  const Allcategory(
-      {required this.eventList,
-      super.key,
-      required this.keep,
-      required this.favoriteEventList,
-      required this.pushInformationScreen});
-  final List<Event> eventList;
-  final List<Event> favoriteEventList;
-  final Function(Event) keep;
-  final Function() pushInformationScreen;
-  @override
-  State<Allcategory> createState() => _AllcategoryState();
-}
+class CategoryScreen extends ConsumerWidget {
+  const CategoryScreen({super.key, this.selecedEvenCategory});
 
-class _AllcategoryState extends State<Allcategory> {
+  final EvenCategory? selecedEvenCategory;
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final bool isLoading = ref.watch(eventListProvider).isLoading;
+    List<Event> eventList = ref.watch(eventListProvider).eventList;
+
+    if (selecedEvenCategory != null) {
+      eventList = eventList
+          .where((event) => event.evenCategory == selecedEvenCategory)
+          .toList();
+    }
     return Container(
       color: ETAColors.screenBackgroundColor,
       child: Scrollbar(
-        child: ListView.builder(
-          itemCount: widget.eventList.length,
-          itemBuilder: (context, index) {
-            return EventListtilecard(
-              event: widget.eventList[index],
-            );
-          },
-        ),
+        child: isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : eventList.isEmpty
+                ? const Center(
+                    child: Text('找不到活動'),
+                  )
+                : ListView.builder(
+                    itemCount: eventList.length,
+                    itemBuilder: (context, index) {
+                      return EventListtilecard(
+                        event: eventList[index],
+                      );
+                    },
+                  ),
       ),
     );
   }
