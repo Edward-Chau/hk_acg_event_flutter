@@ -74,7 +74,9 @@ class _EventListtilecardState extends ConsumerState<EventListtilecard> {
                   height: 100,
                   child: FadeInImage.memoryNetwork(
                     placeholder: kTransparentImage,
-                    image: widget.event.imageURL,
+                    image: widget.event.imageURL.isNotEmpty
+                        ? widget.event.imageURL[0]
+                        : '',
                     fit: BoxFit.cover,
                     imageErrorBuilder: (context, error, stackTrace) =>
                         const Center(

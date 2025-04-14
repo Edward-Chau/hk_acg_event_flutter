@@ -43,10 +43,10 @@ class MyApp extends StatelessWidget {
               width: 1,
             ),
           ),
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 20,
-          ),
+          // contentPadding: const EdgeInsets.symmetric(
+          //   horizontal: 20,
+          //   vertical: 20,
+          // ),
         ),
         filledButtonTheme: FilledButtonThemeData(
           style: FilledButton.styleFrom(

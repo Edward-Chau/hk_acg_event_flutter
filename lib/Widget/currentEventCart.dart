@@ -47,7 +47,7 @@ class CurrentEventCart extends ConsumerWidget {
                     width: 180,
                     child: FadeInImage.memoryNetwork(
                       placeholder: kTransparentImage,
-                      image: event.imageURL,
+                      image: event.imageURL.isNotEmpty ? event.imageURL[0] : '',
                       fit: BoxFit.cover,
                       imageErrorBuilder: (context, error, stackTrace) =>
                           const Center(

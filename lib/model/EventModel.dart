@@ -32,7 +32,7 @@ class Event {
       required this.eventDetail});
 
   final int id;
-  final String imageURL;
+  final List<String> imageURL;
   final String title;
   final List<DateTime> date;
   final double ticket;

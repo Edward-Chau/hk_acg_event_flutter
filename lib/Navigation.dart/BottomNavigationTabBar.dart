@@ -29,44 +29,45 @@ class _BottomNavigationTabBarState extends State<BottomNavigationTabBar> {
     List<Widget> showPage = [
       Homescreen(navigateToEventPage: navigateToEventPage), //首頁
       const Eventscreen(), //活動
+      const MembershipScreen(),
       const MembershipScreen()
     ]; //navigattionScreen
 
     return Scaffold(
-      bottomNavigationBar:
-          // NavigationBar(
-          //   backgroundColor: ETAColors.appbarColors_01,
-          //   selectedIndex: selectedPage,
-          //   onDestinationSelected: (value) {
-          //     setState(() {
-          //       selectedPage = value;
-          //     });
-          //   },
-          //   destinations: const [
-          //     NavigationDestination(icon: Icon(Icons.home), label: '首頁'),
-          //     NavigationDestination(icon: Icon(Icons.newspaper), label: '活動'),
-          //     NavigationDestination(icon: Icon(Icons.home), label: '最新消息'),
-          //     NavigationDestination(icon: Icon(Icons.person), label: '會員中心')
-          //   ],
-          // ),
-
-          BottomNavigationBar(
-        currentIndex: selectedPage,
-        selectedItemColor: Colors.blue,
-        onTap: (value) {
-          setState(
-            () {
-              selectedPage = value;
-            },
-          );
+      bottomNavigationBar: NavigationBar(
+        backgroundColor: Colors.grey[100]!.withOpacity(0.5),
+        selectedIndex: selectedPage,
+        shadowColor: Colors.black,
+        indicatorColor: Colors.blueAccent[100],
+        onDestinationSelected: (value) {
+          setState(() {
+            selectedPage = value;
+          });
         },
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: '首頁'),
-          BottomNavigationBarItem(icon: Icon(Icons.newspaper), label: '活動'),
-          // BottomNavigationBarItem(icon: Icon(Icons.newspaper), label: '最新消息'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: '會員中心'),
+        destinations: const [
+          NavigationDestination(icon: Icon(Icons.home), label: '首頁'),
+          NavigationDestination(icon: Icon(Icons.newspaper), label: '活動'),
+          NavigationDestination(icon: Icon(Icons.chat_outlined), label: '討論'),
+          NavigationDestination(icon: Icon(Icons.person), label: '會員中心')
         ],
       ),
+      //   BottomNavigationBar(
+      //   currentIndex: selectedPage,
+      //   selectedItemColor: Colors.blue,
+      //   onTap: (value) {
+      //     setState(
+      //       () {
+      //         selectedPage = value;
+      //       },
+      //     );
+      //   },
+      //   items: const [
+      //     BottomNavigationBarItem(icon: Icon(Icons.home), label: '首頁'),
+      //     BottomNavigationBarItem(icon: Icon(Icons.newspaper), label: '活動'),
+      //     // BottomNavigationBarItem(icon: Icon(Icons.newspaper), label: '最新消息'),
+      //     BottomNavigationBarItem(icon: Icon(Icons.person), label: '會員中心'),
+      //   ],
+      // ),
       body: showPage[selectedPage],
     );
   }

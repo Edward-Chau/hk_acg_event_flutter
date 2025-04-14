@@ -26,16 +26,21 @@ class ProvideData {
               orElse: () => EvenCategory.acg,
             );
 
+            List<String> imageList = [];
+            for (int j = 0; j < jsonList[i]['eventImages'].length; j++) {
+              imageList.add(jsonList[i]['eventImages'][j]['imageUrl']);
+            }
+            print(jsonList[i]['officialURL'] ?? '');
             final Event getEvent = Event(
-              id: jsonList[i]['eventid'] ?? -1,
-              imageURL: jsonList[i]['imageURL'] ?? 'N/A',
+              id: jsonList[i]['eventId'] ?? -1,
+              imageURL: imageList, // jsonList[i]['eventImages'] ?? '',
               title: jsonList[i]['title'] ?? 'N/A',
               date: [DateTime.now()],
               ticket: (jsonList[i]['ticket'] as int).toDouble(),
               amount: ['amount'],
               evenCategory: evenCategory,
               organizer: jsonList[i]['organizer'] ?? 'N/A',
-              officialURL: jsonList[i]['officialURL'] ?? 'wip n/a',
+              officialURL: jsonList[i]['officialURL'] ?? 'N/A',
               location: jsonList[i]['location'] ?? 'N/A',
               eventDetail: jsonList[i]['eventDetail'] ?? '沒有資訊',
             );

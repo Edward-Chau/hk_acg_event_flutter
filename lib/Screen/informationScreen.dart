@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,6 +10,7 @@ import 'package:hk_acg_event_information/model/EventModel.dart';
 import 'package:hk_acg_event_information/provider/keep_event_provider.dart';
 import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:intl/intl.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -29,6 +31,7 @@ var format = DateFormat.yMd();
 
 class _InformationscreenState extends ConsumerState<Informationscreen> {
   Widget space = const SizedBox(height: 15);
+  int currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -77,22 +80,71 @@ class _InformationscreenState extends ConsumerState<Informationscreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                color: ETAColors.screenBackgroundColor,
-                width: double.infinity,
-                constraints: const BoxConstraints(maxHeight: 200),
-                child: InstaImageViewer(
-                  child: FadeInImage.memoryNetwork(
-                    placeholder: kTransparentImage,
-                    image: widget.event.imageURL,
-                    fit: BoxFit.contain,
-                    imageErrorBuilder: (context, error, stackTrace) =>
-                        const Center(
-                      child: Text('error'),
+              Stack(
+                alignment: Alignment.bottomCenter,
+                children: [
+                  CarouselSlider(
+                    // carouselController: carouselSliderController,
+                    options: CarouselOptions(
+                      scrollPhysics: widget.event.imageURL.length > 1
+                          ? const BouncingScrollPhysics()
+                          : const NeverScrollableScrollPhysics(),
+                      // autoPlay: true,
+                      onPageChanged: (index, reason) {
+                        setState(() {
+                          currentIndex = index;
+                        });
+                      },
+                      viewportFraction: 1,
+                      aspectRatio: 4 / 3,
+                      // height: 200,
                     ),
+                    items: widget.event.imageURL.map((image) {
+                      return InstaImageViewer(
+                        child: FadeInImage.memoryNetwork(
+                          placeholder: kTransparentImage,
+                          image: image,
+                          fit: BoxFit.cover,
+                          imageErrorBuilder: (context, error, stackTrace) =>
+                              const Center(
+                            child: Text('error'),
+                          ),
+                        ),
+                      );
+                    }).toList(),
                   ),
-                ),
+                  if (widget.event.imageURL.length > 1)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 24),
+                      child: AnimatedSmoothIndicator(
+                        activeIndex: currentIndex,
+                        count: widget.event.imageURL.length,
+                        effect: const ExpandingDotsEffect(
+                          dotColor: Colors.white,
+                          activeDotColor: Colors.lightBlueAccent,
+                          dotWidth: 10.0,
+                          dotHeight: 5.0,
+                        ),
+                      ),
+                    ),
+                ],
               ),
+              // : Container(
+              //     color: ETAColors.screenBackgroundColor,
+              //     width: double.infinity,
+              //     constraints: const BoxConstraints(maxHeight: 200),
+              //     child: InstaImageViewer(
+              //       child: FadeInImage.memoryNetwork(
+              //         placeholder: kTransparentImage,
+              //         image: 'widget.event.imageURL',
+              //         fit: BoxFit.contain,
+              //         imageErrorBuilder: (context, error, stackTrace) =>
+              //             const Center(
+              //           child: Text('error'),
+              //         ),
+              //       ),
+              //     ),
+              //   ),
               const SizedBox(height: 20),
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -134,17 +186,7 @@ class _InformationscreenState extends ConsumerState<Informationscreen> {
                         if (!await launchUrl(Uri.parse(
                             'https://www.google.com/maps/search/${widget.event.location}'))) {
                           throw Exception('Could not launch url');
-                        } //launch location in map
-
-                        // if (await MapLauncher.isMapAvailable(MapType.google)!=null) {
-                        //   await MapLauncher.showMarker(
-                        //     mapType: MapType.google,
-                        //     coords: Coords(37.759392, -122.5107336),
-                        //     title: "title",
-                        //     description: "description",
-                        //   );
-                        // }
-                        //   MapsLauncher.launchQuery(widget.event.location);
+                        }
                       },
                       child: Row(
                         children: [
@@ -164,34 +206,43 @@ class _InformationscreenState extends ConsumerState<Informationscreen> {
                     Text(evenCategoryChineseName[widget.event.evenCategory]
                         .toString()),
                     space,
-                    const Text('官方網站', style: TextStyle(color: Colors.grey)),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                              side: const BorderSide(color: Colors.blue),
-                              borderRadius: BorderRadius.circular(5))),
-                      onPressed: () async {
-                        if (!await launchUrl(
-                            Uri.parse(widget.event.officialURL))) {
-                          throw Exception('無法前往網站');
-                        }
-                      },
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
+
+                    if (widget.event.officialURL != 'N/A')
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(
-                            CupertinoIcons.globe,
-                            color: Colors.blue,
-                          ),
-                          SizedBox(width: 5),
-                          Text(
-                            "前往官方網站",
-                            style: TextStyle(color: Colors.blue),
+                          const Text('官方網站',
+                              style: TextStyle(color: Colors.grey)),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                    side: const BorderSide(color: Colors.blue),
+                                    borderRadius: BorderRadius.circular(5))),
+                            onPressed: () async {
+                              if (!await launchUrl(
+                                  Uri.parse(widget.event.officialURL))) {
+                                throw Exception('無法前往網站');
+                              }
+                            },
+                            child: const Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  CupertinoIcons.globe,
+                                  color: Colors.blue,
+                                ),
+                                SizedBox(width: 5),
+                                Text(
+                                  "前往官方網站",
+                                  style: TextStyle(color: Colors.blue),
+                                )
+                              ],
+                            ),
                           )
                         ],
-                      ),
-                    )
+                      )
                     //time
                     ,
                     space,

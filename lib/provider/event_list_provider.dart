@@ -14,6 +14,7 @@ class EventListNotifier extends StateNotifier<ProvideEventClass> {
       isLoading: false,
       eventList: await ProvideData.getEventList(),
     );
+    print("get event list");
   }
 
   updateEventList() {

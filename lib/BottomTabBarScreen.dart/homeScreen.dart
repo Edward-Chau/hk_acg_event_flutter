@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hk_acg_event_information/Screen/favouriteScreen.dart';
 import 'package:hk_acg_event_information/Widget/DoujinshiCard.dart';
 import 'package:hk_acg_event_information/Widget/EventListTileCard.dart';
 import 'package:hk_acg_event_information/Widget/currentEventCart.dart';
@@ -37,7 +38,17 @@ class _HomescreenState extends ConsumerState<Homescreen> {
       appBar: AppBar(
         title: const Text('香港動漫資訊'),
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.notifications))
+          IconButton(
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return const FavouriteScreen();
+              }));
+            },
+            icon: const Icon(
+              Icons.bookmark,
+            ),
+          ),
+          // IconButton(onPressed: () {}, icon: const Icon(Icons.notifications))
         ],
       ),
       body: isLoading
@@ -121,8 +132,8 @@ class _HomescreenState extends ConsumerState<Homescreen> {
                     ),
                     const Divider(indent: 5, endIndent: 5),
                     const HomeScreenIconWidget(
-                      icon: Icons.collections_bookmark_outlined,
-                      title: '最新登錄同人誌',
+                      icon: Icons.local_fire_department_outlined,
+                      title: '熱門討論',
                     ),
                     space10,
                     GridView.count(
@@ -154,7 +165,7 @@ class _HomescreenState extends ConsumerState<Homescreen> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Text('更多同人誌'),
+                                Text('更多討論'),
                                 Icon(Icons.arrow_forward_ios_outlined,
                                     size: 15),
                               ],
