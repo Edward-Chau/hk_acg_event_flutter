@@ -23,7 +23,7 @@ class EventListtilecard extends ConsumerStatefulWidget {
 class _EventListtilecardState extends ConsumerState<EventListtilecard> {
   @override
   Widget build(BuildContext context) {
-    final List<int> keepList = ref.watch(keepEventProviderProvider);
+    final List<String> keepList = ref.watch(keepEventProviderProvider);
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
@@ -57,7 +57,7 @@ class _EventListtilecardState extends ConsumerState<EventListtilecard> {
                     .copyWith(fontWeight: FontWeight.bold),
               ),
               const Spacer(),
-              if (keepList.contains(widget.event.id))
+              if (keepList.contains(widget.event.documentId))
                 const Icon(
                   Icons.favorite,
                   color: Colors.red,
@@ -69,20 +69,32 @@ class _EventListtilecardState extends ConsumerState<EventListtilecard> {
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: Row(
               children: [
-                SizedBox(
+                Container(
+                  decoration: BoxDecoration(color: Colors.grey[400]),
                   width: 100,
                   height: 100,
-                  child: FadeInImage.memoryNetwork(
-                    placeholder: kTransparentImage,
-                    image: widget.event.imageURL.isNotEmpty
-                        ? widget.event.imageURL[0]
-                        : '',
-                    fit: BoxFit.cover,
-                    imageErrorBuilder: (context, error, stackTrace) =>
-                        const Center(
-                      child: Text('error'),
-                    ),
-                  ),
+                  child: widget.event.image.isEmpty
+                      ? const Center(
+                          child: Text(
+                            '沒有活動圖片',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        )
+                      : FadeInImage.memoryNetwork(
+                          placeholder: kTransparentImage,
+                          image: widget.event.image.isNotEmpty
+                              ? widget.event.image[0]
+                              : '',
+                          fit: BoxFit.cover,
+                          imageErrorBuilder: (context, error, stackTrace) =>
+                              const Center(
+                            child: Text('error'),
+                          ),
+                        ),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
@@ -96,10 +108,10 @@ class _EventListtilecardState extends ConsumerState<EventListtilecard> {
                       Text(
                         widget.event.location,
                       ),
-                      Text('門票: \$${widget.event.ticket}'),
-                      Text(
-                        '主辦單位: ${widget.event.organizer}',
-                      ),
+                      // Text('門票: \$${widget.event.ticket}'),
+                      // Text(
+                      //   '主辦單位: ${widget.event.organizer}',
+                      // ),
                     ],
                   ),
                 )

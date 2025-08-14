@@ -35,7 +35,7 @@ class _InformationscreenState extends ConsumerState<Informationscreen> {
 
   @override
   Widget build(BuildContext context) {
-    final List<int> keepList = ref.watch(keepEventProviderProvider);
+    final List<String> keepList = ref.watch(keepEventProviderProvider);
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -43,11 +43,11 @@ class _InformationscreenState extends ConsumerState<Informationscreen> {
             onPressed: () {
               ref
                   .read(keepEventProviderProvider.notifier)
-                  .toggleKeep(widget.event.id);
+                  .toggleKeep(widget.event.documentId);
             },
             icon: Icon(
               Icons.favorite,
-              color: keepList.contains(widget.event.id)
+              color: keepList.contains(widget.event.documentId)
                   ? Colors.red
                   : Colors.white,
             ),
@@ -86,7 +86,7 @@ class _InformationscreenState extends ConsumerState<Informationscreen> {
                   CarouselSlider(
                     // carouselController: carouselSliderController,
                     options: CarouselOptions(
-                      scrollPhysics: widget.event.imageURL.length > 1
+                      scrollPhysics: widget.event.image.length > 1
                           ? const BouncingScrollPhysics()
                           : const NeverScrollableScrollPhysics(),
                       // autoPlay: true,
@@ -99,7 +99,7 @@ class _InformationscreenState extends ConsumerState<Informationscreen> {
                       aspectRatio: 4 / 3,
                       // height: 200,
                     ),
-                    items: widget.event.imageURL.map((image) {
+                    items: widget.event.image.map((image) {
                       return InstaImageViewer(
                         child: FadeInImage.memoryNetwork(
                           placeholder: kTransparentImage,
@@ -113,12 +113,12 @@ class _InformationscreenState extends ConsumerState<Informationscreen> {
                       );
                     }).toList(),
                   ),
-                  if (widget.event.imageURL.length > 1)
+                  if (widget.event.image.length > 1)
                     Padding(
                       padding: const EdgeInsets.only(bottom: 24),
                       child: AnimatedSmoothIndicator(
                         activeIndex: currentIndex,
-                        count: widget.event.imageURL.length,
+                        count: widget.event.image.length,
                         effect: const ExpandingDotsEffect(
                           dotColor: Colors.white,
                           activeDotColor: Colors.lightBlueAccent,
@@ -170,7 +170,7 @@ class _InformationscreenState extends ConsumerState<Informationscreen> {
                     ),
                     space,
                     const Text('主辦單位', style: TextStyle(color: Colors.grey)),
-                    Text(widget.event.organizer),
+                    // Text(widget.event.organizer),
                     space,
                     const Text('時間', style: TextStyle(color: Colors.grey)),
                     Text('WIP'
@@ -198,7 +198,7 @@ class _InformationscreenState extends ConsumerState<Informationscreen> {
                     ),
                     space,
                     const Text('入場費用', style: TextStyle(color: Colors.grey)),
-                    ...widget.event.amount.map((toElement) {
+                    ...widget.event.prices.map((toElement) {
                       return Text(toElement);
                     }),
                     space,

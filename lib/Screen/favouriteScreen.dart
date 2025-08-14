@@ -16,12 +16,8 @@ class FavouriteScreen extends ConsumerStatefulWidget {
 class _FavouriteScreenState extends ConsumerState<FavouriteScreen> {
   @override
   Widget build(BuildContext context) {
-    final bool isLoading = ref.watch(eventListProvider).isLoading;
-    final List<Event> eventList = ref.watch(eventListProvider).eventList;
-    final List<int> keepList = ref.watch(keepEventProviderProvider);
-    final List<Event> keepListOfEvent = eventList.where((event) {
-      return keepList.contains(event.id); // Assuming Event has an 'id' field
-    }).toList();
+    final eventList = ref.watch(eventProvider);
+    final List<String> keepList = ref.watch(keepEventProviderProvider);
 
     //
     return Scaffold(
@@ -34,9 +30,13 @@ class _FavouriteScreenState extends ConsumerState<FavouriteScreen> {
         ),
         backgroundColor: ETAColors.appbarColors_01,
       ),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : keepList.isEmpty
+      body: eventList.when(
+        data: (eventlists) {
+          final List<Event> keepListOfEvent = eventlists.where((event) {
+            return keepList
+                .contains(event.id); // Assuming Event has an 'id' field
+          }).toList();
+          return keepList.isEmpty
               ? const SizedBox(
                   width: double.infinity,
                   child: Padding(
@@ -65,7 +65,11 @@ class _FavouriteScreenState extends ConsumerState<FavouriteScreen> {
                       ],
                     );
                   },
-                ),
+                );
+        },
+        loading: () => const CircularProgressIndicator(),
+        error: (err, _) => Text('Error: $err'),
+      ),
     );
   }
 }

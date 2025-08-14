@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hk_acg_event_information/Widget/EventListTileCard.dart';
 import 'package:hk_acg_event_information/model/EventModel.dart';
-import 'package:hk_acg_event_information/model/enumCategory.dart';
 
 class ACGCategoryScreen extends StatefulWidget {
   const ACGCategoryScreen(

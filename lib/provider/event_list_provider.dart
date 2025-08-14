@@ -1,46 +1,41 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hk_acg_event_information/data/EventDate.dart';
 import 'package:hk_acg_event_information/model/EventModel.dart';
+import 'package:hk_acg_event_information/provider/dio_provider.dart';
 
-class EventListNotifier extends StateNotifier<ProvideEventClass> {
-  EventListNotifier()
-      : super(const ProvideEventClass(isLoading: true, eventList: [])) {
-    getEventList();
+class EventNotifier extends AsyncNotifier<List<Event>> {
+  @override
+  Future<List<Event>> build() async {
+    return _fetchAllEvents();
   }
 
-  getEventList() async {
-    state = ProvideEventClass(
-      isLoading: false,
-      eventList: await ProvideData.getEventList(),
-    );
-    print("get event list");
+  Future<List<Event>> _fetchAllEvents() async {
+    final dio = ref.read(dioProvider);
+    try {
+      final response = await dio.get('/all-events');
+      final data = (response.data['data'] as List<dynamic>? ?? [])
+          .map((e) => Event.fromJson(e))
+          .toList();
+
+      return data;
+    } catch (e, st) {
+      print('❌ Error: $e');
+      throw e;
+    }
   }
 
-  updateEventList() {
+  Future<void> updateEventList() async {
     HapticFeedback.mediumImpact();
-    state = ProvideEventClass(
-      isLoading: true,
-      eventList: state.eventList,
-    );
-    //call get function
-    getEventList();
-    print('updated');
+    state = const AsyncLoading();
+    try {
+      state = await AsyncValue.guard(() => _fetchAllEvents());
+      print('updated');
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+    }
     HapticFeedback.mediumImpact();
   }
 }
 
-final eventListProvider =
-    StateNotifierProvider<EventListNotifier, ProvideEventClass>((ref) {
-  return EventListNotifier();
-});
-
-class ProvideEventClass {
-  const ProvideEventClass({
-    this.isLoading = true,
-    required this.eventList,
-  });
-
-  final bool isLoading;
-  final List<Event> eventList;
-}
+final eventProvider =
+    AsyncNotifierProvider<EventNotifier, List<Event>>(EventNotifier.new);

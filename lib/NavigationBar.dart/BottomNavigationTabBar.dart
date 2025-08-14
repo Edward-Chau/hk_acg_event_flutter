@@ -1,33 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:hk_acg_event_information/BottomTabBarScreen.dart/acgNewsScreen.dart';
-import 'package:hk_acg_event_information/BottomTabBarScreen.dart/eventScreen.dart';
-import 'package:hk_acg_event_information/BottomTabBarScreen.dart/homeScreen.dart';
-import 'package:hk_acg_event_information/BottomTabBarScreen.dart/membership_screen.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hk_acg_event_information/NavigationPage.dart/acgNewsScreen.dart';
+import 'package:hk_acg_event_information/NavigationPage.dart/eventScreen.dart';
+import 'package:hk_acg_event_information/NavigationPage.dart/homeScreen.dart';
+import 'package:hk_acg_event_information/NavigationPage.dart/membership_screen.dart';
 import 'package:hk_acg_event_information/data/EventDate.dart';
 import 'package:hk_acg_event_information/model/ETAColor.dart';
 import 'package:hk_acg_event_information/model/EventModel.dart';
+import 'package:hk_acg_event_information/provider/pageNavigation_provider.dart';
 
-class BottomNavigationTabBar extends StatefulWidget {
+class BottomNavigationTabBar extends ConsumerStatefulWidget {
   const BottomNavigationTabBar({super.key});
 
   @override
-  State<BottomNavigationTabBar> createState() => _BottomNavigationTabBarState();
+  ConsumerState<BottomNavigationTabBar> createState() =>
+      _BottomNavigationTabBarState();
 }
 
-int selectedPage = 0;
 List<Event> favoriteEvent = [];
 
-class _BottomNavigationTabBarState extends State<BottomNavigationTabBar> {
+class _BottomNavigationTabBarState
+    extends ConsumerState<BottomNavigationTabBar> {
   @override
   Widget build(BuildContext context) {
-    void navigateToEventPage() {
-      setState(() {
-        selectedPage = 1;
-      });
-    }
+    final int selectedPageIndex = ref.watch(pageNavigationProvider);
 
-    List<Widget> showPage = [
-      Homescreen(navigateToEventPage: navigateToEventPage), //首頁
+    List<Widget> displayScreen = [
+      const Homescreen(), //首頁
       const Eventscreen(), //活動
       const MembershipScreen(),
       const MembershipScreen()
@@ -36,13 +35,11 @@ class _BottomNavigationTabBarState extends State<BottomNavigationTabBar> {
     return Scaffold(
       bottomNavigationBar: NavigationBar(
         backgroundColor: Colors.grey[100]!.withOpacity(0.5),
-        selectedIndex: selectedPage,
+        selectedIndex: selectedPageIndex,
         shadowColor: Colors.black,
         indicatorColor: Colors.blueAccent[100],
         onDestinationSelected: (value) {
-          setState(() {
-            selectedPage = value;
-          });
+          ref.read(pageNavigationProvider.notifier).onPageChage(value);
         },
         destinations: const [
           NavigationDestination(icon: Icon(Icons.home), label: '首頁'),
@@ -68,7 +65,7 @@ class _BottomNavigationTabBarState extends State<BottomNavigationTabBar> {
       //     BottomNavigationBarItem(icon: Icon(Icons.person), label: '會員中心'),
       //   ],
       // ),
-      body: showPage[selectedPage],
+      body: displayScreen[selectedPageIndex],
     );
   }
 }

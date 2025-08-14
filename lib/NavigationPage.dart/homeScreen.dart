@@ -1,22 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hk_acg_event_information/Screen/favouriteScreen.dart';
-import 'package:hk_acg_event_information/Widget/DoujinshiCard.dart';
 import 'package:hk_acg_event_information/Widget/EventListTileCard.dart';
 import 'package:hk_acg_event_information/Widget/currentEventCart.dart';
 import 'package:hk_acg_event_information/Widget/homeScreenIconWidget.dart';
-import 'package:hk_acg_event_information/model/DoujinshiModel.dart';
-import 'package:hk_acg_event_information/model/ETAColor.dart';
 import 'package:hk_acg_event_information/model/EventModel.dart';
 import 'package:hk_acg_event_information/provider/event_list_provider.dart';
+import 'package:hk_acg_event_information/provider/pageNavigation_provider.dart';
+import 'package:logger/logger.dart';
 
 class Homescreen extends ConsumerStatefulWidget {
   const Homescreen({
     super.key,
-    required this.navigateToEventPage,
   });
-
-  final void Function() navigateToEventPage;
 
   @override
   ConsumerState<Homescreen> createState() => _HomescreenState();
@@ -28,36 +24,40 @@ class _HomescreenState extends ConsumerState<Homescreen> {
 
   @override
   Widget build(BuildContext context) {
-    final bool isLoading = ref.watch(eventListProvider).isLoading;
-    final List<Event> eventList = ref.watch(eventListProvider).eventList;
-
-    final currentEventList =
-        eventList.length < 5 ? eventList : eventList.sublist(1, 5); //4 item
+    final eventList = ref.watch(eventProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('香港動漫資訊'),
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return const FavouriteScreen();
-              }));
-            },
-            icon: const Icon(
-              Icons.bookmark,
+        appBar: AppBar(
+          title: const Text('香港動漫資訊'),
+          actions: [
+            IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return const FavouriteScreen();
+                    },
+                  ),
+                );
+              },
+              icon: const Icon(
+                Icons.bookmark,
+              ),
             ),
-          ),
-          // IconButton(onPressed: () {}, icon: const Icon(Icons.notifications))
-        ],
-      ),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : Container(
+            // IconButton(onPressed: () {}, icon: const Icon(Icons.notifications))
+          ],
+        ),
+        body: eventList.when(
+          data: (eventsLists) {
+            final List<Event> currentEventList = eventsLists.length < 5
+                ? eventsLists
+                : eventsLists.sublist(1, 5); //4 item
+            return Container(
               margin: const EdgeInsets.symmetric(horizontal: 5),
               child: RefreshIndicator(
                 onRefresh: () async {
-                  ref.read(eventListProvider.notifier).updateEventList();
+                  ref.read(eventProvider.notifier).updateEventList();
                 },
                 child: ListView(
                   children: [
@@ -66,7 +66,7 @@ class _HomescreenState extends ConsumerState<Homescreen> {
                       icon: Icons.event,
                       title: '即將舉辦的活動',
                     ),
-                    eventList.isEmpty
+                    eventsLists.isEmpty
                         ? const Row(
                             children: [
                               Expanded(
@@ -78,7 +78,7 @@ class _HomescreenState extends ConsumerState<Homescreen> {
                             ],
                           )
                         : EventListtilecard(
-                            event: eventList[0],
+                            event: eventsLists[0],
                           ),
                     space10,
                     const Divider(indent: 5, endIndent: 5),
@@ -116,7 +116,11 @@ class _HomescreenState extends ConsumerState<Homescreen> {
                                     borderRadius: BorderRadius.circular(10)),
                                 foregroundColor: Colors.white,
                                 backgroundColor: Colors.blue),
-                            onPressed: widget.navigateToEventPage,
+                            onPressed: () {
+                              ref
+                                  .read(pageNavigationProvider.notifier)
+                                  .onPageChage(1);
+                            },
                             child: const Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisSize: MainAxisSize.min,
@@ -179,7 +183,10 @@ class _HomescreenState extends ConsumerState<Homescreen> {
                   ],
                 ),
               ),
-            ),
-    );
+            );
+          },
+          loading: () => const Center(child: const CircularProgressIndicator()),
+          error: (err, _) => Text('發生錯誤: $err'),
+        ));
   }
 }

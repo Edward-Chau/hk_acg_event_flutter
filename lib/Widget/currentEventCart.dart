@@ -19,7 +19,7 @@ class CurrentEventCart extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final List<int> keepList = ref.watch(keepEventProviderProvider);
+    final List<String> keepList = ref.watch(keepEventProviderProvider);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 3),
       child: InkWell(
@@ -42,25 +42,36 @@ class CurrentEventCart extends ConsumerWidget {
             children: [
               Stack(
                 children: [
-                  SizedBox(
+                  Container(
+                    decoration: BoxDecoration(color: Colors.grey[400]),
                     height: 100,
                     width: 180,
-                    child: FadeInImage.memoryNetwork(
-                      placeholder: kTransparentImage,
-                      image: event.imageURL.isNotEmpty ? event.imageURL[0] : '',
-                      fit: BoxFit.cover,
-                      imageErrorBuilder: (context, error, stackTrace) =>
-                          const Center(
-                        child: Text('error'),
-                      ),
-                    ),
+                    child: event.image.isEmpty
+                        ? const Center(
+                            child: Text(
+                              '沒有活動圖片',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          )
+                        : FadeInImage.memoryNetwork(
+                            placeholder: kTransparentImage,
+                            image: event.image.isNotEmpty ? event.image[0] : '',
+                            fit: BoxFit.cover,
+                            imageErrorBuilder: (context, error, stackTrace) =>
+                                const Center(
+                              child: Text('圖片發生錯誤'),
+                            ),
+                          ),
                   ),
                   Positioned(
                     top: 5,
                     left: 5,
                     child: Eventcategorylabel(event: event),
                   ),
-                  if (keepList.contains(event.id))
+                  if (keepList.contains(event.documentId))
                     const Positioned(
                       top: 5,
                       right: 5,

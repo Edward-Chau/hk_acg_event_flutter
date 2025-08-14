@@ -6,7 +6,6 @@ import 'package:hk_acg_event_information/Screen/favouriteScreen.dart';
 import 'package:hk_acg_event_information/Widget/eventCategoryLabel.dart';
 import 'package:hk_acg_event_information/model/ETAColor.dart';
 import 'package:hk_acg_event_information/model/EventModel.dart';
-import 'package:hk_acg_event_information/model/enumCategory.dart';
 
 class Eventscreen extends StatefulWidget {
   const Eventscreen({super.key});
@@ -21,7 +20,8 @@ class _EventscreenState extends State<Eventscreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: EvenCategory.values.length,
+      length: 4,
+      // EvenCategory.values.length,
       child: Scaffold(
         appBar: AppBar(
           title: const Text('活動消息'),
