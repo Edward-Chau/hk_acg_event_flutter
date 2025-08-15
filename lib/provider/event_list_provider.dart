@@ -1,4 +1,3 @@
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hk_acg_event_information/model/EventModel.dart';
 import 'package:hk_acg_event_information/provider/dio_provider.dart';
@@ -20,20 +19,31 @@ class EventNotifier extends AsyncNotifier<List<Event>> {
       return data;
     } catch (e, st) {
       print('❌ Error: $e');
+      // await eventListWithRetryOnError();
       throw e;
     }
   }
 
-  Future<void> updateEventList() async {
-    HapticFeedback.mediumImpact();
+  Future<bool> updateEventList() async {
     state = const AsyncLoading();
     try {
       state = await AsyncValue.guard(() => _fetchAllEvents());
       print('updated');
+      return true;
     } catch (e, st) {
       state = AsyncValue.error(e, st);
+      // await eventListWithRetryOnError();
+      return false;
     }
-    HapticFeedback.mediumImpact();
+  }
+
+  Future<void> eventListWithRetryOnError() async {
+    while (true) {
+      final success = await updateEventList();
+      if (success) break; // 成功就跳出
+      print('⏳ 5 秒後重試...');
+      await Future.delayed(const Duration(seconds: 5));
+    }
   }
 }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hk_acg_event_information/Screen/favouriteScreen.dart';
 import 'package:hk_acg_event_information/Widget/EventListTileCard.dart';
@@ -7,7 +8,6 @@ import 'package:hk_acg_event_information/Widget/homeScreenIconWidget.dart';
 import 'package:hk_acg_event_information/model/EventModel.dart';
 import 'package:hk_acg_event_information/provider/event_list_provider.dart';
 import 'package:hk_acg_event_information/provider/pageNavigation_provider.dart';
-import 'package:logger/logger.dart';
 
 class Homescreen extends ConsumerStatefulWidget {
   const Homescreen({
@@ -57,7 +57,13 @@ class _HomescreenState extends ConsumerState<Homescreen> {
               margin: const EdgeInsets.symmetric(horizontal: 5),
               child: RefreshIndicator(
                 onRefresh: () async {
-                  ref.read(eventProvider.notifier).updateEventList();
+                  final bool refreshIsSuccess =
+                      await ref.read(eventProvider.notifier).updateEventList();
+
+                  if (refreshIsSuccess) {
+                    print('refresh is success');
+                    HapticFeedback.mediumImpact();
+                  }
                 },
                 child: ListView(
                   children: [
@@ -77,9 +83,7 @@ class _HomescreenState extends ConsumerState<Homescreen> {
                               ),
                             ],
                           )
-                        : EventListtilecard(
-                            event: eventsLists[0],
-                          ),
+                        : EventListtilecard(event: eventsLists[0]),
                     space10,
                     const Divider(indent: 5, endIndent: 5),
                     const HomeScreenIconWidget(
@@ -185,7 +189,7 @@ class _HomescreenState extends ConsumerState<Homescreen> {
               ),
             );
           },
-          loading: () => const Center(child: const CircularProgressIndicator()),
+          loading: () => const Center(child: CircularProgressIndicator()),
           error: (err, _) => Text('發生錯誤: $err'),
         ));
   }

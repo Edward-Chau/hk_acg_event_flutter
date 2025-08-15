@@ -15,27 +15,42 @@ class CategoryScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final eventList = ref.watch(eventProvider);
 
-    // if (selecedEvenCategory != null) {
-    //   eventList = eventList
-    //       .where((event) => event.evenCategory == selecedEvenCategory)
-    //       .toList();
-    // }
+    List<Event> filterEvent(events) {
+      if (selecedEvenCategory != null) {
+        final event = events
+            .where((event) => event.evenCategory == selecedEvenCategory)
+            .toList();
+
+        return event;
+      }
+
+      return events;
+    }
+
     return Container(
       color: ETAColors.screenBackgroundColor,
       child: Scrollbar(
           child: eventList.when(
-        data: (eventLists) => eventLists.isEmpty
-            ? const Center(
-                child: Text('找不到活動'),
-              )
-            : ListView.builder(
-                itemCount: eventLists.length,
-                itemBuilder: (context, index) {
-                  return EventListtilecard(
-                    event: eventLists[index],
-                  );
-                },
-              ),
+        data: (eventLists) {
+          final List<Event> filterEvents = filterEvent(eventLists);
+
+          return filterEvents.isEmpty
+              ? const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 30, horizontal: 8),
+                  child: Text(
+                    '找不到活動',
+                    textAlign: TextAlign.center,
+                  ),
+                )
+              : ListView.builder(
+                  itemCount: filterEvents.length,
+                  itemBuilder: (context, index) {
+                    return EventListtilecard(
+                      event: filterEvents[index],
+                    );
+                  },
+                );
+        },
         loading: () => const CircularProgressIndicator(),
         error: (err, _) => Text('Error: $err'),
       )),

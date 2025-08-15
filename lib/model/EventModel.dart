@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 enum EvenCategory { acg, comicMarket, only, electronicMusic, other }
 
@@ -18,6 +19,59 @@ var evenCategoryColor = {
   EvenCategory.other: Colors.grey[300]
 };
 
+// ------------------ EventTime ------------------
+class EventTime {
+  final DateTime startTime;
+  final DateTime endTime;
+
+  EventTime({required this.startTime, required this.endTime});
+
+  factory EventTime.fromJson(Map<String, dynamic> json) {
+    final date = json['event_Date'] as String? ?? '';
+    final startTimeStr = json['start_Time'] as String? ?? '00:00:00.000';
+    final endTimeStr = json['end_Time'] as String? ?? '23:59:59.999';
+
+    // 合併成完整時間字串
+    final startDateTime = DateTime.parse('$date $startTimeStr');
+    final endDateTime = DateTime.parse('$date $endTimeStr');
+
+    return EventTime(
+      startTime: startDateTime,
+      endTime: endDateTime,
+    );
+  }
+
+//   String formatDateWithWeekday(DateTime date) {
+//   final weekdays = ['日', '一', '二', '三', '四', '五', '六'];
+//   return '${DateFormat('dd/MM/yyyy').format(date)}(${weekdays[date.weekday % 7]})';
+// }
+
+  /// 格式化成 yyyy/MM/dd(周) HH:mm ~ HH:mm
+  String formatDetailTime() {
+    final weekdays = ['日', '一', '二', '三', '四', '五', '六'];
+    final startWeek = weekdays[startTime.weekday % 7]; // Dart 週日=7
+    final startDate = DateFormat('yyyy/MM/dd').format(startTime);
+    final startTimeStr = DateFormat('HH:mm').format(startTime);
+    final endTimeStr = DateFormat('HH:mm').format(endTime);
+    return '$startDate($startWeek) $startTimeStr ~ $endTimeStr';
+  }
+}
+
+class Ticket {
+  final String category;
+  final double price;
+
+  Ticket({required this.category, required this.price});
+
+  factory Ticket.fromJson(Map<String, dynamic> json) {
+    return Ticket(
+      category: json['TicketCategory'] ?? '',
+      price: (json['prices'] as num?)?.toDouble() ?? 0.0,
+    );
+  }
+}
+
+// ------------------ Event ------------------
 class Event {
   const Event({
     this.id = '',
@@ -25,10 +79,9 @@ class Event {
     this.title = '沒有標題',
     this.image = const [],
     this.eventTimes = const [],
-    // this.ticket = 0.0,
-    this.prices = const [],
+    this.tickets = const [],
     this.evenCategory = EvenCategory.other,
-    // this.organizer = '',
+    this.organizer = '',
     this.officialURL = '',
     this.location = '',
     this.eventDetail = '',
@@ -38,31 +91,26 @@ class Event {
   final String documentId;
   final String title;
   final List<String> image;
-  final List<DateTime> eventTimes; // 存所有場次的 startTime
-  // final double ticket; // 最便宜票價
-  final List<String> prices; // 存所有票種價格（字串）
+  final List<EventTime> eventTimes;
+  final List<Ticket> tickets;
   final EvenCategory evenCategory;
-  // final String organizer;
+  final String organizer;
   final String officialURL;
   final String location;
   final String eventDetail;
 
   factory Event.fromJson(Map<String, dynamic> json) {
-    // 轉換 eventTimes -> List<DateTime>（用 startTime）
-    final List<DateTime> times = (json['eventTimes'] as List<dynamic>? ?? [])
-        .map((e) => DateTime.parse(e['startTime'] as String))
+    // eventTimes -> List<EventTime>
+    final List<EventTime> times = (json['eventTimes'] as List<dynamic>? ?? [])
+        .map((e) => EventTime.fromJson(e))
         .toList();
 
-    // tickets -> 最便宜價格 & 所有價格字串
-    final tickets = (json['tickets'] as List<dynamic>? ?? []);
-    final prices = tickets.map((e) => (e['prices'] as num).toDouble()).toList();
-    // final minPrice =
-    //     prices.isNotEmpty ? prices.reduce((a, b) => a < b ? a : b) : 0.0;
-    final priceStrings = prices.map((p) => p.toString()).toList();
+    final ticketList = (json['tickets'] as List<dynamic>? ?? [])
+        .map((e) => Ticket.fromJson(e))
+        .toList();
+
     final List<String> imageList = (json['image'] as List<dynamic>? ?? [])
-        .map(
-          (e) => 'http://localhost:1337${e['url']}',
-        )
+        .map((e) => 'http://localhost:1337${e['url']}')
         .toList();
 
     return Event(
@@ -71,10 +119,10 @@ class Event {
       title: json['title'] ?? '沒有標題',
       image: imageList,
       eventTimes: times,
-      // ticket: minPrice,
-      prices: priceStrings,
+      tickets: ticketList,
       evenCategory: _parseCategory(json['evenCategory']),
-      // organizer: json['organizer'] ?? '',
+      organizer:
+          json['organizer'] != null ? json['organizer']['organizer_name'] : '',
       officialURL: json['officialURL'] ?? '',
       location: json['location'] ?? '',
       eventDetail: json['eventDetail'] ?? '',
@@ -92,7 +140,6 @@ class Event {
       case 'electronicMusic':
         return EvenCategory.electronicMusic;
       case 'other':
-        return EvenCategory.other;
       default:
         return EvenCategory.other;
     }

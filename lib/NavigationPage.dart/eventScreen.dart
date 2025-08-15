@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hk_acg_event_information/EventCategoryScreen.dart/ACGCategoryScreen.dart';
 import 'package:hk_acg_event_information/EventCategoryScreen.dart/allCategory.dart';
 import 'package:hk_acg_event_information/Screen/eventCalendarScreen.dart';
 import 'package:hk_acg_event_information/Screen/favouriteScreen.dart';
-import 'package:hk_acg_event_information/Widget/eventCategoryLabel.dart';
-import 'package:hk_acg_event_information/model/ETAColor.dart';
 import 'package:hk_acg_event_information/model/EventModel.dart';
 
 class Eventscreen extends StatefulWidget {

@@ -35,9 +35,7 @@ class _EventListtilecardState extends ConsumerState<EventListtilecard> {
               context,
               MaterialPageRoute(
                 builder: (context) {
-                  return Informationscreen(
-                    event: widget.event,
-                  );
+                  return Informationscreen(event: widget.event);
                 },
               ),
             );

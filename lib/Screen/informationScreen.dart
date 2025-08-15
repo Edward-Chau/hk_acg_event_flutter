@@ -29,6 +29,25 @@ class Informationscreen extends ConsumerStatefulWidget {
 var format = DateFormat.yMd();
 // var formatTime=DateFormat.ymd
 
+String formatDateWithWeekday(DateTime date) {
+  final weekdays = ['日', '一', '二', '三', '四', '五', '六'];
+  return '${DateFormat('dd/MM/yyyy').format(date)}(${weekdays[date.weekday % 7]})';
+}
+
+String titleEventTimes(List<EventTime> eventTimes) {
+  if (eventTimes.isEmpty) return '';
+
+  // 只有一個時間段
+  if (eventTimes.length == 1) {
+    return formatDateWithWeekday(eventTimes[0].startTime);
+  }
+
+  // 多個時間段，顯示範圍
+  final firstDate = formatDateWithWeekday(eventTimes.first.startTime);
+  final lastDate = formatDateWithWeekday(eventTimes.last.endTime);
+  return '$firstDate ~ $lastDate';
+}
+
 class _InformationscreenState extends ConsumerState<Informationscreen> {
   Widget space = const SizedBox(height: 15);
   int currentIndex = 0;
@@ -63,13 +82,14 @@ class _InformationscreenState extends ConsumerState<Informationscreen> {
                   .titleLarge!
                   .copyWith(color: Colors.white, fontSize: 18),
             ),
-            Text(
-              ' widget.time',
-              style: Theme.of(context)
-                  .textTheme
-                  .titleSmall!
-                  .copyWith(fontWeight: FontWeight.w700),
-            )
+            if (widget.event.eventTimes.isNotEmpty)
+              Text(
+                titleEventTimes(widget.event.eventTimes),
+                style: Theme.of(context)
+                    .textTheme
+                    .titleSmall!
+                    .copyWith(fontWeight: FontWeight.w700),
+              )
           ],
         ),
         backgroundColor: ETAColors.appbarColors_01,
@@ -83,36 +103,54 @@ class _InformationscreenState extends ConsumerState<Informationscreen> {
               Stack(
                 alignment: Alignment.bottomCenter,
                 children: [
-                  CarouselSlider(
-                    // carouselController: carouselSliderController,
-                    options: CarouselOptions(
-                      scrollPhysics: widget.event.image.length > 1
-                          ? const BouncingScrollPhysics()
-                          : const NeverScrollableScrollPhysics(),
-                      // autoPlay: true,
-                      onPageChanged: (index, reason) {
-                        setState(() {
-                          currentIndex = index;
-                        });
-                      },
-                      viewportFraction: 1,
-                      aspectRatio: 4 / 3,
-                      // height: 200,
-                    ),
-                    items: widget.event.image.map((image) {
-                      return InstaImageViewer(
-                        child: FadeInImage.memoryNetwork(
-                          placeholder: kTransparentImage,
-                          image: image,
-                          fit: BoxFit.cover,
-                          imageErrorBuilder: (context, error, stackTrace) =>
-                              const Center(
-                            child: Text('error'),
+                  widget.event.image.isEmpty
+                      ? AspectRatio(
+                          aspectRatio: 4 / 3,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                            ),
+                            child: const Center(
+                              child: Text(
+                                '沒有活動圖片',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
                           ),
+                        )
+                      : CarouselSlider(
+                          options: CarouselOptions(
+                            scrollPhysics: widget.event.image.length > 1
+                                ? const BouncingScrollPhysics()
+                                : const NeverScrollableScrollPhysics(),
+                            // autoPlay: true,
+                            onPageChanged: (index, reason) {
+                              setState(() {
+                                currentIndex = index;
+                              });
+                            },
+                            viewportFraction: 1,
+                            aspectRatio: 4 / 3,
+                          ),
+                          items: widget.event.image.map((image) {
+                            return InstaImageViewer(
+                              child: FadeInImage.memoryNetwork(
+                                placeholder: kTransparentImage,
+                                image: image,
+                                fit: BoxFit.cover,
+                                imageErrorBuilder:
+                                    (context, error, stackTrace) =>
+                                        const Center(
+                                  child: Text('error'),
+                                ),
+                              ),
+                            );
+                          }).toList(),
                         ),
-                      );
-                    }).toList(),
-                  ),
                   if (widget.event.image.length > 1)
                     Padding(
                       padding: const EdgeInsets.only(bottom: 24),
@@ -129,22 +167,6 @@ class _InformationscreenState extends ConsumerState<Informationscreen> {
                     ),
                 ],
               ),
-              // : Container(
-              //     color: ETAColors.screenBackgroundColor,
-              //     width: double.infinity,
-              //     constraints: const BoxConstraints(maxHeight: 200),
-              //     child: InstaImageViewer(
-              //       child: FadeInImage.memoryNetwork(
-              //         placeholder: kTransparentImage,
-              //         image: 'widget.event.imageURL',
-              //         fit: BoxFit.contain,
-              //         imageErrorBuilder: (context, error, stackTrace) =>
-              //             const Center(
-              //           child: Text('error'),
-              //         ),
-              //       ),
-              //     ),
-              //   ),
               const SizedBox(height: 20),
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -169,37 +191,60 @@ class _InformationscreenState extends ConsumerState<Informationscreen> {
                       ],
                     ),
                     space,
-                    const Text('主辦單位', style: TextStyle(color: Colors.grey)),
-                    // Text(widget.event.organizer),
-                    space,
-                    const Text('時間', style: TextStyle(color: Colors.grey)),
-                    Text('WIP'
-                        // format.format(widget.event.dateStart[0]) ==
-                        //         format.format(widget.event.dateStart.last)
-                        //     ? format.format(widget.event.dateStart[0])
-                        //     : '${format.format(widget.event.dateStart[0])} ~ ${format.format(widget.event.dateEnd.last)}',
-                        ),
-                    space,
-                    const Text('會場', style: TextStyle(color: Colors.grey)),
-                    InkWell(
-                      onTap: () async {
-                        if (!await launchUrl(Uri.parse(
-                            'https://www.google.com/maps/search/${widget.event.location}'))) {
-                          throw Exception('Could not launch url');
-                        }
-                      },
-                      child: Row(
+                    if (widget.event.organizer != '')
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(widget.event.location,
-                              style: TextStyle(color: Colors.blue[800])),
-                          Icon(Icons.location_on, color: Colors.orange[800])
+                          const Text('主辦單位',
+                              style: TextStyle(color: Colors.grey)),
+                          Text(widget.event.organizer),
                         ],
                       ),
-                    ),
+                    space,
+                    if (widget.event.eventTimes.isNotEmpty)
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text('時間',
+                              style: TextStyle(color: Colors.grey)),
+                          ...widget.event.eventTimes.map(
+                              (dayTime) => Text(dayTime.formatDetailTime()))
+                        ],
+                      ),
+
+                    space,
+
+                    if (widget.event.location != '')
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text('會場',
+                              style: TextStyle(color: Colors.grey)),
+                          InkWell(
+                            onTap: () async {
+                              if (!await launchUrl(Uri.parse(
+                                  'https://www.google.com/maps/search/${widget.event.location}'))) {
+                                throw Exception('Could not launch url');
+                              }
+                            },
+                            child: Row(
+                              children: [
+                                Text(widget.event.location,
+                                    style: TextStyle(color: Colors.blue[800])),
+                                Icon(Icons.location_on,
+                                    color: Colors.orange[800])
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     space,
                     const Text('入場費用', style: TextStyle(color: Colors.grey)),
-                    ...widget.event.prices.map((toElement) {
-                      return Text(toElement);
+                    ...widget.event.tickets.map((ticket) {
+                      return Text('${ticket.category}: $${ticket.price}');
                     }),
                     space,
                     const Text('活動内容', style: TextStyle(color: Colors.grey)),
