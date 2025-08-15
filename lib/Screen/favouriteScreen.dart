@@ -34,7 +34,7 @@ class _FavouriteScreenState extends ConsumerState<FavouriteScreen> {
         data: (eventlists) {
           final List<Event> keepListOfEvent = eventlists.where((event) {
             return keepList
-                .contains(event.id); // Assuming Event has an 'id' field
+                .contains(event.documentId); // Assuming Event has an 'id' field
           }).toList();
           return keepList.isEmpty
               ? const SizedBox(
@@ -54,9 +54,7 @@ class _FavouriteScreenState extends ConsumerState<FavouriteScreen> {
                     return Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        EventListtilecard(
-                          event: keepListOfEvent[index],
-                        ),
+                        EventListtilecard(event: keepListOfEvent[index]),
                         if (keepListOfEvent.length - 1 == index)
                           Padding(
                             padding: const EdgeInsets.only(top: 8),

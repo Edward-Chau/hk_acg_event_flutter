@@ -46,6 +46,15 @@ class EventTime {
 //   return '${DateFormat('dd/MM/yyyy').format(date)}(${weekdays[date.weekday % 7]})';
 // }
 
+  //   String formatTitleTime() {
+  //   final weekdays = ['日', '一', '二', '三', '四', '五', '六'];
+  //   final startWeek = weekdays[startTime.weekday % 7]; // Dart 週日=7
+  //   final startDate = DateFormat('yyyy/MM/dd').format(startTime);
+  //   final startTimeStr = DateFormat('HH:mm').format(startTime);
+  //   final endTimeStr = DateFormat('HH:mm').format(endTime);
+  //   return '$startDate($startWeek) $startTimeStr ~ $endTimeStr';
+  // }
+
   /// 格式化成 yyyy/MM/dd(周) HH:mm ~ HH:mm
   String formatDetailTime() {
     final weekdays = ['日', '一', '二', '三', '四', '五', '六'];
@@ -125,7 +134,7 @@ class Event {
           json['organizer'] != null ? json['organizer']['organizer_name'] : '',
       officialURL: json['officialURL'] ?? '',
       location: json['location'] ?? '',
-      eventDetail: json['eventDetail'] ?? '',
+      eventDetail: json['event_detail'] ?? '',
     );
   }
 

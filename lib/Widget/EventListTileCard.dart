@@ -21,6 +21,23 @@ class EventListtilecard extends ConsumerStatefulWidget {
 }
 
 class _EventListtilecardState extends ConsumerState<EventListtilecard> {
+  String formatDateWithWeekday(DateTime date) {
+    final weekdays = ['日', '一', '二', '三', '四', '五', '六'];
+    return '${DateFormat('dd/MM/yyyy').format(date)}(${weekdays[date.weekday % 7]})';
+  }
+
+  String eventTime(List<EventTime> eventTime) {
+    if (eventTime.isEmpty) {
+      return '';
+    }
+
+    if (eventTime.length == 1) {
+      return formatDateWithWeekday(eventTime[0].startTime);
+    }
+
+    return '${formatDateWithWeekday(eventTime[0].startTime)} ~ ${formatDateWithWeekday(eventTime[eventTime.length - 1].endTime)}';
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<String> keepList = ref.watch(keepEventProviderProvider);
@@ -30,6 +47,7 @@ class _EventListtilecardState extends ConsumerState<EventListtilecard> {
       child: Container(
         decoration: const BoxDecoration(color: Colors.white),
         child: ListTile(
+          titleAlignment: ListTileTitleAlignment.top,
           onTap: () {
             Navigator.push(
               context,
@@ -45,16 +63,18 @@ class _EventListtilecardState extends ConsumerState<EventListtilecard> {
             children: [
               Eventcategorylabel(event: widget.event), //label
               const SizedBox(width: 8),
-              Text(
-                widget.event.title,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium!
-                    .copyWith(fontWeight: FontWeight.bold),
+              Expanded(
+                child: Text(
+                  widget.event.title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium!
+                      .copyWith(fontWeight: FontWeight.bold),
+                ),
               ),
-              const Spacer(),
+
               if (keepList.contains(widget.event.documentId))
                 const Icon(
                   Icons.favorite,
@@ -100,16 +120,24 @@ class _EventListtilecardState extends ConsumerState<EventListtilecard> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'eventTime wip',
+                        widget.event.location,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        eventTime(widget.event.eventTimes),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(color: Colors.blue[700]),
                       ),
-                      Text(
-                        widget.event.location,
-                      ),
+
                       // Text('門票: \$${widget.event.ticket}'),
-                      // Text(
-                      //   '主辦單位: ${widget.event.organizer}',
-                      // ),
+                      if (widget.event.organizer != '')
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5),
+                          child: Text('主辦單位: ${widget.event.organizer}'),
+                        ),
                     ],
                   ),
                 )

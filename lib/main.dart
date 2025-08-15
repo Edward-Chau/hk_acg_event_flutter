@@ -12,7 +12,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // print(evenCategoryChineseName[EvenCategory.acg]);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(

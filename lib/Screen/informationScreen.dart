@@ -56,6 +56,7 @@ class _InformationscreenState extends ConsumerState<Informationscreen> {
   Widget build(BuildContext context) {
     final List<String> keepList = ref.watch(keepEventProviderProvider);
     return Scaffold(
+      backgroundColor: Colors.grey[50],
       appBar: AppBar(
         actions: [
           IconButton(
@@ -94,214 +95,225 @@ class _InformationscreenState extends ConsumerState<Informationscreen> {
         ),
         backgroundColor: ETAColors.appbarColors_01,
       ),
-      body: Container(
-        color: Colors.grey[50],
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Stack(
-                alignment: Alignment.bottomCenter,
-                children: [
-                  widget.event.image.isEmpty
-                      ? AspectRatio(
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Stack(
+              alignment: Alignment.bottomCenter,
+              children: [
+                widget.event.image.isEmpty
+                    ? AspectRatio(
+                        aspectRatio: 4 / 3,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                          ),
+                          child: const Center(
+                            child: Text(
+                              '沒有活動圖片',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    : CarouselSlider(
+                        options: CarouselOptions(
+                          scrollPhysics: widget.event.image.length > 1
+                              ? const BouncingScrollPhysics()
+                              : const NeverScrollableScrollPhysics(),
+                          // autoPlay: true,
+                          onPageChanged: (index, reason) {
+                            setState(() {
+                              currentIndex = index;
+                            });
+                          },
+                          viewportFraction: 1,
                           aspectRatio: 4 / 3,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.grey[300],
-                            ),
-                            child: const Center(
-                              child: Text(
-                                '沒有活動圖片',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                        ),
+                        items: widget.event.image.map((image) {
+                          return InstaImageViewer(
+                            child: FadeInImage.memoryNetwork(
+                              placeholder: kTransparentImage,
+                              image: image,
+                              fit: BoxFit.cover,
+                              imageErrorBuilder: (context, error, stackTrace) =>
+                                  const Center(
+                                child: Text('error'),
                               ),
                             ),
-                          ),
-                        )
-                      : CarouselSlider(
-                          options: CarouselOptions(
-                            scrollPhysics: widget.event.image.length > 1
-                                ? const BouncingScrollPhysics()
-                                : const NeverScrollableScrollPhysics(),
-                            // autoPlay: true,
-                            onPageChanged: (index, reason) {
-                              setState(() {
-                                currentIndex = index;
-                              });
-                            },
-                            viewportFraction: 1,
-                            aspectRatio: 4 / 3,
-                          ),
-                          items: widget.event.image.map((image) {
-                            return InstaImageViewer(
-                              child: FadeInImage.memoryNetwork(
-                                placeholder: kTransparentImage,
-                                image: image,
-                                fit: BoxFit.cover,
-                                imageErrorBuilder:
-                                    (context, error, stackTrace) =>
-                                        const Center(
-                                  child: Text('error'),
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                  if (widget.event.image.length > 1)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 24),
-                      child: AnimatedSmoothIndicator(
-                        activeIndex: currentIndex,
-                        count: widget.event.image.length,
-                        effect: const ExpandingDotsEffect(
-                          dotColor: Colors.white,
-                          activeDotColor: Colors.lightBlueAccent,
-                          dotWidth: 10.0,
-                          dotHeight: 5.0,
-                        ),
+                          );
+                        }).toList(),
+                      ),
+                if (widget.event.image.length > 1)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 24),
+                    child: AnimatedSmoothIndicator(
+                      activeIndex: currentIndex,
+                      count: widget.event.image.length,
+                      effect: const ExpandingDotsEffect(
+                        dotColor: Colors.white,
+                        activeDotColor: Colors.lightBlueAccent,
+                        dotWidth: 10.0,
+                        dotHeight: 5.0,
                       ),
                     ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 15),
-                          child: Eventcategorylabel(event: widget.event),
-                        ),
-                        Text(
+                  ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 15),
+                        child: Eventcategorylabel(event: widget.event),
+                      ),
+                      Expanded(
+                        child: Text(
                           widget.event.title,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
+                          // maxLines: 2,
+                          // overflow: TextOverflow.ellipsis,
                           style: Theme.of(context)
                               .textTheme
                               .titleMedium!
                               .copyWith(fontWeight: FontWeight.bold),
                         ),
+                      ),
+                    ],
+                  ),
+                  space,
+                  if (widget.event.organizer != '')
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text('主辦單位',
+                            style: TextStyle(color: Colors.grey)),
+                        Text(widget.event.organizer),
                       ],
                     ),
-                    space,
-                    if (widget.event.organizer != '')
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text('主辦單位',
-                              style: TextStyle(color: Colors.grey)),
-                          Text(widget.event.organizer),
-                        ],
-                      ),
-                    space,
-                    if (widget.event.eventTimes.isNotEmpty)
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text('時間',
-                              style: TextStyle(color: Colors.grey)),
-                          ...widget.event.eventTimes.map(
-                              (dayTime) => Text(dayTime.formatDetailTime()))
-                        ],
-                      ),
-
-                    space,
-
-                    if (widget.event.location != '')
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text('會場',
-                              style: TextStyle(color: Colors.grey)),
-                          InkWell(
-                            onTap: () async {
-                              if (!await launchUrl(Uri.parse(
-                                  'https://www.google.com/maps/search/${widget.event.location}'))) {
-                                throw Exception('Could not launch url');
-                              }
-                            },
-                            child: Row(
-                              children: [
-                                Text(widget.event.location,
-                                    style: TextStyle(color: Colors.blue[800])),
-                                Icon(Icons.location_on,
-                                    color: Colors.orange[800])
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    space,
-                    const Text('入場費用', style: TextStyle(color: Colors.grey)),
-                    ...widget.event.tickets.map((ticket) {
-                      return Text('${ticket.category}: $${ticket.price}');
-                    }),
-                    space,
-                    const Text('活動内容', style: TextStyle(color: Colors.grey)),
-                    Text(evenCategoryChineseName[widget.event.evenCategory]
-                        .toString()),
-                    space,
-
-                    if (widget.event.officialURL != 'N/A')
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text('官方網站',
-                              style: TextStyle(color: Colors.grey)),
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                    side: const BorderSide(color: Colors.blue),
-                                    borderRadius: BorderRadius.circular(5))),
-                            onPressed: () async {
-                              if (!await launchUrl(
-                                  Uri.parse(widget.event.officialURL))) {
-                                throw Exception('無法前往網站');
-                              }
-                            },
-                            child: const Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  CupertinoIcons.globe,
-                                  color: Colors.blue,
-                                ),
-                                SizedBox(width: 5),
-                                Text(
-                                  "前往官方網站",
-                                  style: TextStyle(color: Colors.blue),
-                                )
-                              ],
-                            ),
-                          )
-                        ],
-                      )
-                    //time
-                    ,
-                    space,
-                    const Dividerspece(
-                      dividerTitle: '活動資訊',
+                  space,
+                  if (widget.event.eventTimes.isNotEmpty)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text('時間', style: TextStyle(color: Colors.grey)),
+                        ...widget.event.eventTimes
+                            .map((dayTime) => Text(dayTime.formatDetailTime()))
+                      ],
                     ),
-                    space,
-                    Html(data: widget.event.eventDetail),
-                    const SizedBox(height: 30) //end space
-                  ],
-                ),
+
+                  space,
+
+                  if (widget.event.location != '')
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text('會場', style: TextStyle(color: Colors.grey)),
+                        InkWell(
+                          onTap: () async {
+                            if (!await launchUrl(Uri.parse(
+                                'https://www.google.com/maps/search/${widget.event.location}'))) {
+                              throw Exception('Could not launch url');
+                            }
+                          },
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Icon(Icons.location_on,
+                                  color: Colors.orange[800]),
+                              Expanded(
+                                child: Text(widget.event.location,
+                                    style: TextStyle(color: Colors.blue[800])),
+                              ),
+                            ],
+                          ),
+                        ),
+                        space,
+                      ],
+                    ),
+
+                  if (widget.event.tickets.isNotEmpty)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text('入場費用',
+                            style: TextStyle(color: Colors.grey)),
+                        ...widget.event.tickets.map((ticket) {
+                          return Text('${ticket.category}: \$${ticket.price}');
+                        }),
+                        space,
+                      ],
+                    ),
+                  const Text('活動内容', style: TextStyle(color: Colors.grey)),
+                  Text(evenCategoryChineseName[widget.event.evenCategory]
+                      .toString()),
+                  space,
+                  if (widget.event.officialURL != '')
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text(
+                          '官方網站',
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                        const SizedBox(height: 5),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  side: const BorderSide(color: Colors.blue),
+                                  borderRadius: BorderRadius.circular(5))),
+                          onPressed: () async {
+                            if (!await launchUrl(
+                                Uri.parse(widget.event.officialURL))) {
+                              throw Exception('無法前往網站');
+                            }
+                          },
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                CupertinoIcons.globe,
+                                color: Colors.blue,
+                              ),
+                              SizedBox(width: 5),
+                              Text(
+                                "前往官方網站",
+                                style: TextStyle(color: Colors.blue),
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    )
+                  //time
+                  ,
+                  space,
+                  const Dividerspece(
+                    dividerTitle: '活動資訊',
+                  ),
+                  space,
+                  Html(data: widget.event.eventDetail),
+                  const SizedBox(height: 30) //end space
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
