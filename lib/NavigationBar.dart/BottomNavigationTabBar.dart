@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hk_acg_event_information/NavigationPage.dart/acgNewsScreen.dart';
+import 'package:hk_acg_event_information/NavigationPage.dart/LoginScreen.dart';
 import 'package:hk_acg_event_information/NavigationPage.dart/eventScreen.dart';
 import 'package:hk_acg_event_information/NavigationPage.dart/homeScreen.dart';
-import 'package:hk_acg_event_information/NavigationPage.dart/membership_screen.dart';
-import 'package:hk_acg_event_information/data/EventDate.dart';
-import 'package:hk_acg_event_information/model/ETAColor.dart';
 import 'package:hk_acg_event_information/model/EventModel.dart';
 import 'package:hk_acg_event_information/provider/pageNavigation_provider.dart';
 
@@ -28,8 +25,8 @@ class _BottomNavigationTabBarState
     List<Widget> displayScreen = [
       const Homescreen(), //首頁
       const Eventscreen(), //活動
-      const MembershipScreen(),
-      const MembershipScreen()
+      const Center(child: Text('wip')),
+      const LoginScreen()
     ]; //navigattionScreen
 
     return Scaffold(

@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
 
-class MembershipScreen extends StatefulWidget {
-  const MembershipScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  State<MembershipScreen> createState() => _MembershipScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _MembershipScreenState extends State<MembershipScreen> {
+class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailTextController = TextEditingController();
   final TextEditingController passwordTextController = TextEditingController();
   final TextEditingController confirmPasswordTextController =
@@ -36,7 +36,7 @@ class _MembershipScreenState extends State<MembershipScreen> {
         child: Center(
           child: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 30),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [

@@ -100,6 +100,8 @@ class _EventCalendarScreenState extends ConsumerState<EventCalendarScreen> {
                   ),
                 ),
                 const SizedBox(height: 20),
+                const Divider(),
+                const SizedBox(height: 20),
                 _selectedEvents.isEmpty
                     ? const Padding(
                         padding: EdgeInsets.all(8.0),
