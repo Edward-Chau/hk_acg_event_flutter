@@ -1,0 +1,45 @@
+import 'dart:convert';
+import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hk_acg_event_information/model/User_profile_model.dart';
+import 'package:hk_acg_event_information/provider/dio_provider.dart';
+
+// 建立 AuthRepository
+class AuthRepository {
+  final Dio dio;
+
+  AuthRepository(this.dio);
+
+  /// 登入並回傳 UserProfile
+  Future<UserProfile> login(String identifier, String password) async {
+    try {
+      final response = await dio.post(
+        '/profile/login',
+        data: {
+          "identifier": identifier,
+          "password": password,
+        },
+      );
+
+      return UserProfile.fromJson(response.data);
+    } on DioException catch (e) {
+      // 判斷是否為 400 或 401，代表帳號或密碼錯誤
+      if (e.response?.statusCode == 400 || e.response?.statusCode == 401) {
+        throw Exception("帳號或密碼錯誤");
+      } else {
+        throw Exception("伺服器錯誤，請稍後再試");
+      }
+    } catch (e) {
+      throw Exception("未知錯誤: $e");
+    }
+  }
+
+  // 登出（清除資料）
+  Future<void> logout() async {}
+}
+
+// Riverpod Provider
+final authRepositoryProvider = Provider<AuthRepository>((ref) {
+  final dio = ref.watch(dioProvider);
+  return AuthRepository(dio);
+});

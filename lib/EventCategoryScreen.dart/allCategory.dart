@@ -29,8 +29,7 @@ class CategoryScreen extends ConsumerWidget {
 
     return Container(
       color: ETAColors.screenBackgroundColor,
-      child: Scrollbar(
-          child: eventList.when(
+      child: eventList.when(
         data: (eventLists) {
           final List<Event> filterEvents = filterEvent(eventLists);
 
@@ -53,7 +52,7 @@ class CategoryScreen extends ConsumerWidget {
         },
         loading: () => const CircularProgressIndicator(),
         error: (err, _) => Text('Error: $err'),
-      )),
+      ),
     );
   }
 }

@@ -1,4 +1,5 @@
 class UserProfile {
+  final String id;
   final String documentId;
   final String username;
   final String usericon;
@@ -6,6 +7,7 @@ class UserProfile {
   final bool isLogin;
 
   const UserProfile({
+    this.id = '',
     this.documentId = '',
     this.username = '',
     this.usericon = '',
@@ -27,21 +29,12 @@ class UserProfile {
     }
 
     return UserProfile(
-      documentId: user['documentId'] ?? '',
-      username: user['user_name'] ?? '',
+      id: (user['id'] ?? '').toString(),
+      documentId: (user['documentId'] ?? '').toString(),
+      username: (user['user_name'] ?? '').toString(),
       usericon: 'http://localhost:1337$imageUrl',
       jwt: jwt,
-      isLogin: jwt != '',
+      isLogin: jwt != '' && (user['documentId'] != ''),
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'documentId': documentId,
-      'username': username,
-      'image': usericon,
-      'jwt': jwt,
-      'isLogin': isLogin,
-    };
   }
 }
