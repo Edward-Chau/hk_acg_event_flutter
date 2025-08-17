@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hk_acg_event_information/NavigationBar.dart/BottomNavigationTabBar.dart';
 import 'package:hk_acg_event_information/model/ETAColor.dart';
+import 'package:flutter_quill/flutter_quill.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
@@ -13,6 +15,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        FlutterQuillLocalizations.delegate,
+      ],
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         scaffoldBackgroundColor: ETAColors.screenBackgroundColor,

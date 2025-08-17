@@ -8,8 +8,9 @@ class ForumList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final latestAsync = ref.watch(threadProvider(type));
-    return latestAsync.when(
+    final threadAsync = ref.watch(threadProvider(type));
+
+    return threadAsync.when(
       data: (threads) => threads.isEmpty
           ? const Padding(
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
@@ -20,7 +21,7 @@ class ForumList extends ConsumerWidget {
             )
           : RefreshIndicator(
               onRefresh: () async {
-                await ref.read(threadProvider(type).notifier).refresh(type);
+                await ref.read(threadProvider(type).notifier).refresh();
               },
               child: ListView.builder(
                 itemCount: threads.length,
@@ -29,8 +30,7 @@ class ForumList extends ConsumerWidget {
                 ),
               ),
             ),
-      loading: () => const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+      loading: () => const Center(
         child: CircularProgressIndicator(),
       ),
       error: (e, st) => Center(child: Text('錯誤: $e')),

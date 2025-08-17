@@ -4,9 +4,11 @@ import 'package:hk_acg_event_information/model/User_profile_model.dart';
 import 'package:hk_acg_event_information/provider/dio_provider.dart';
 
 class ThreadNotifier extends FamilyAsyncNotifier<List<Thread>, String> {
+  late final String _type; // 存起來，方便 refresh 使用
+
   @override
   Future<List<Thread>> build(String type) async {
-    //  _type = type;
+    _type = type;
     return _fetchThreads(type);
   }
 
@@ -30,9 +32,9 @@ class ThreadNotifier extends FamilyAsyncNotifier<List<Thread>, String> {
   }
 
   // 刷新
-  Future<void> refresh(type) async {
+  Future<void> refresh() async {
     state = const AsyncLoading();
-    state = await AsyncValue.guard(() => _fetchThreads(type));
+    state = await AsyncValue.guard(() => _fetchThreads(_type));
   }
 }
 

@@ -15,16 +15,7 @@ class AuthRepository {
       final response = await dio.get('/profile/me');
 
       return UserProfile.fromJson(response.data);
-    }
-    // on DioException catch (e) {
-    //   // 判斷是否為 400 或 401，代表帳號或密碼錯誤
-    //   if (e.response?.statusCode == 400 || e.response?.statusCode == 401) {
-    //     throw Exception("帳號或密碼錯誤");
-    //   } else {
-    //     throw Exception("伺服器錯誤，請稍後再試");
-    //   }
-    // }
-    catch (e) {
+    } catch (e) {
       throw Exception("未知錯誤: $e");
     }
   }

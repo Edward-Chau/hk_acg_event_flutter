@@ -50,7 +50,7 @@ class CategoryScreen extends ConsumerWidget {
                   },
                 );
         },
-        loading: () => const CircularProgressIndicator(),
+        loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, _) => Text('Error: $err'),
       ),
     );
