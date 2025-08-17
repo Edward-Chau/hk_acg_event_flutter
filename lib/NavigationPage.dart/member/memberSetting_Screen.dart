@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hk_acg_event_information/Widget/setting_card.dart';
-import 'package:hk_acg_event_information/model/ETAColor.dart';
 import 'package:hk_acg_event_information/provider/userProvider.dart';
 
 class MembersettingScreen extends ConsumerStatefulWidget {
@@ -21,10 +20,26 @@ class _MembersettingScreenState extends ConsumerState<MembersettingScreen> {
         title: const Text('會員中心'),
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
         child: SingleChildScrollView(
           child: Column(
             children: [
+              SettingCard(
+                onClick: () {},
+                hideArror: true,
+                child: Row(
+                  children: [
+                    Text(
+                      userProfile.username,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               Text(userProfile.id),
               Text(userProfile.documentId),
               Text(userProfile.jwt),

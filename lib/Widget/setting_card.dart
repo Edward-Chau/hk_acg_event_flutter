@@ -17,7 +17,7 @@ class SettingCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(8),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
           child: Row(
             children: [
               Expanded(child: child),

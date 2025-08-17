@@ -10,6 +10,25 @@ class AuthRepository {
 
   AuthRepository(this.dio);
 
+  Future<UserProfile> getMe(String jwt) async {
+    try {
+      final response = await dio.get('/profile/me');
+
+      return UserProfile.fromJson(response.data);
+    }
+    // on DioException catch (e) {
+    //   // 判斷是否為 400 或 401，代表帳號或密碼錯誤
+    //   if (e.response?.statusCode == 400 || e.response?.statusCode == 401) {
+    //     throw Exception("帳號或密碼錯誤");
+    //   } else {
+    //     throw Exception("伺服器錯誤，請稍後再試");
+    //   }
+    // }
+    catch (e) {
+      throw Exception("未知錯誤: $e");
+    }
+  }
+
   /// 登入並回傳 UserProfile
   Future<UserProfile> login(String identifier, String password) async {
     try {
@@ -35,7 +54,9 @@ class AuthRepository {
   }
 
   // 登出（清除資料）
-  Future<void> logout() async {}
+  Future<void> logout() async {
+    //
+  }
 }
 
 // Riverpod Provider

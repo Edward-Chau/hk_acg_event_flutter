@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hk_acg_event_information/NavigationPage.dart/LoginScreen.dart';
 import 'package:hk_acg_event_information/NavigationPage.dart/eventScreen.dart';
+import 'package:hk_acg_event_information/NavigationPage.dart/forum/forumScreen.dart';
 import 'package:hk_acg_event_information/NavigationPage.dart/homeScreen.dart';
-import 'package:hk_acg_event_information/NavigationPage.dart/memberSetting_Screen.dart';
+import 'package:hk_acg_event_information/NavigationPage.dart/member/loginScreen.dart';
+import 'package:hk_acg_event_information/NavigationPage.dart/member/memberSetting_Screen.dart';
 import 'package:hk_acg_event_information/model/EventModel.dart';
-import 'package:hk_acg_event_information/model/user_profile_model.dart';
 import 'package:hk_acg_event_information/provider/pageNavigation_provider.dart';
 import 'package:hk_acg_event_information/provider/userProvider.dart';
 
@@ -29,7 +29,7 @@ class _BottomNavigationTabBarState
     List<Widget> displayScreen = [
       const Homescreen(), //首頁
       const Eventscreen(), //活動
-      const Center(child: Text('wip')),
+      const ForumScreen(),
       userProfile.isLogin ? const MembersettingScreen() : const LoginScreen()
     ]; //navigattionScreen
 

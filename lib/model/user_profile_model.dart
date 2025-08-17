@@ -20,7 +20,6 @@ class UserProfile {
     final jwt = json['jwt'] ?? '';
     String imageUrl = '';
 
-    // 取 user_icon 第一張的 medium url，如果有的話
     if (user['user_icon'] != null &&
         (user['user_icon'] as List).isNotEmpty &&
         user['user_icon'][0]['formats'] != null &&
@@ -29,12 +28,30 @@ class UserProfile {
     }
 
     return UserProfile(
-      id: (user['id'] ?? '').toString(),
-      documentId: (user['documentId'] ?? '').toString(),
-      username: (user['user_name'] ?? '').toString(),
+      id: user['id']?.toString() ?? '',
+      documentId: user['documentId'] ?? '',
+      username: user['user_name'] ?? '',
       usericon: 'http://localhost:1337$imageUrl',
       jwt: jwt,
-      isLogin: jwt != '' && (user['documentId'] != ''),
+      isLogin: jwt != '',
+    );
+  }
+
+  UserProfile copyWith({
+    String? id,
+    String? documentId,
+    String? username,
+    String? usericon,
+    String? jwt,
+    bool? isLogin,
+  }) {
+    return UserProfile(
+      id: id ?? this.id,
+      documentId: documentId ?? this.documentId,
+      username: username ?? this.username,
+      usericon: usericon ?? this.usericon,
+      jwt: jwt ?? this.jwt,
+      isLogin: isLogin ?? this.isLogin,
     );
   }
 }
