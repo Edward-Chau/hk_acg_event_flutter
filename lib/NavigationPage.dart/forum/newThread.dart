@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
+import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 import 'package:image_picker/image_picker.dart';
 
 class Newthread extends StatefulWidget {
@@ -46,13 +47,15 @@ class _NewthreadState extends State<Newthread> {
   Future<void> _insertImage() async {
     final picker = ImagePicker();
     final picked = await picker.pickImage(source: ImageSource.gallery);
-    if (picked == null) return;
-
-    final index = _contentController.selection.baseOffset; // 游標位置
-    _contentController.document.insert(index, BlockEmbed.image(picked.path));
-    // 插入後游標跳到圖片後面
-    _contentController.updateSelection(
-        TextSelection.collapsed(offset: index + 1), ChangeSource.local);
+    if (picked != null) {
+      final imageUrl = picked.path; // 這裡可以用上傳 API 換成 URL
+      // 插入圖片 embed
+      final index = _contentController.selection.baseOffset;
+      _contentController.document.insert(
+        index,
+        BlockEmbed.image(imageUrl),
+      );
+    }
   }
 
   void onSubmit() {
@@ -146,18 +149,13 @@ class _NewthreadState extends State<Newthread> {
                   endIndent: 0,
                   color: Colors.grey,
                 ),
-                Expanded(
-                  child: Stack(
-                    children: [
-                      QuillEditor.basic(
-                        controller: _contentController,
-                        config: const QuillEditorConfig(
-                          placeholder: '敍述...',
-                          padding:
-                              EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                        ),
-                      ),
-                    ],
+                QuillEditor.basic(
+                  controller: _contentController,
+                  config: QuillEditorConfig(
+                    placeholder: '敍述...',
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                    embedBuilders: FlutterQuillEmbeds.editorBuilders(),
                   ),
                 ),
                 // QuillSimpleToolbar(

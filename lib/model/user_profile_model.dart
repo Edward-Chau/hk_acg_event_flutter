@@ -31,7 +31,7 @@ class UserProfile {
       id: user['id']?.toString() ?? '',
       documentId: user['documentId'] ?? '',
       username: user['user_name'] ?? '',
-      usericon: 'http://localhost:1337$imageUrl',
+      usericon: user['user_icon'] ?? 'http://localhost:1337$imageUrl',
       jwt: jwt,
       isLogin: jwt != '',
     );
