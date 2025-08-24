@@ -138,14 +138,17 @@ class _InformationscreenState extends ConsumerState<Informationscreen> {
                         items: widget.event.image.map((image) {
                           return InstaImageViewer(
                             child: FadeInImage.memoryNetwork(
-                              placeholder: kTransparentImage,
-                              image: image,
-                              fit: BoxFit.cover,
-                              imageErrorBuilder: (context, error, stackTrace) =>
-                                  const Center(
-                                child: Text('error'),
-                              ),
-                            ),
+                                placeholder: kTransparentImage,
+                                image: image,
+                                fit: BoxFit.cover,
+                                imageErrorBuilder:
+                                    (context, error, stackTrace) {
+                                  print(error);
+
+                                  return const Center(
+                                    child: Text('error'),
+                                  );
+                                }),
                           );
                         }).toList(),
                       ),

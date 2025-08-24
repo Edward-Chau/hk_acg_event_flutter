@@ -36,6 +36,19 @@ class UserNotifier extends StateNotifier<UserProfile> {
     return await _secureStorage.read(key: 'jwt');
   }
 
+  /// 註冊
+  Future<void> register(String email, String password) async {
+    try {
+      final user = await authRepository.register(email, password);
+      //save jwt token
+      await _secureStorage.write(key: 'jwt', value: user.jwt);
+      state = user;
+      Logger().d('成功登入');
+    } catch (e) {
+      rethrow; // 錯誤往上丟給 UI
+    }
+  }
+
   /// 登入
   Future<void> login(String identifier, String password) async {
     try {

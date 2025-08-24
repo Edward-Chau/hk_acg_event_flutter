@@ -23,31 +23,33 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   Future<void> submit() async {
     if (!formKey.currentState!.validate()) return;
+    setState(() {
+      errorMessage = null;
+      isLoading = true;
+    });
 
-    if (newMember) {
-      // 註冊
-      print('new member');
-    } else {
-      //login
-      setState(() {
-        errorMessage = null;
-        isLoading = true;
-      });
-
-      try {
+    try {
+      if (newMember) {
+        //register
+        await ref.read(userProvider.notifier).register(
+              emailTextController.text,
+              passwordTextController.text,
+            );
+      } else {
+        //login
         await ref.read(userProvider.notifier).login(
               emailTextController.text,
               passwordTextController.text,
             );
-      } catch (e) {
-        setState(() {
-          errorMessage = e.toString().replaceFirst("Exception: ", "");
-        });
-      } finally {
-        setState(() {
-          isLoading = false;
-        });
       }
+    } catch (e) {
+      setState(() {
+        errorMessage = e.toString().replaceFirst("Exception: ", "");
+      });
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 

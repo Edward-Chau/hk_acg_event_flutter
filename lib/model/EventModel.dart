@@ -119,7 +119,7 @@ class Event {
         .toList();
 
     final List<String> imageList = (json['image'] as List<dynamic>? ?? [])
-        .map((e) => 'http://localhost:1337${e['url']}')
+        .map((e) => e['url'] as String)
         .toList();
 
     return Event(

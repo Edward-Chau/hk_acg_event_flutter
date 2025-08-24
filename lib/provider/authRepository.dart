@@ -20,6 +20,31 @@ class AuthRepository {
     }
   }
 
+  Future<UserProfile> register(String email, String password) async {
+    try {
+      final response = await dio.post(
+        '/profile/register',
+        data: {
+          "email": email,
+          "password": password,
+        },
+      );
+
+      return UserProfile.fromJson(response.data);
+    } on DioException catch (e) {
+      // 判斷是否為 400 或 401，代表帳號或密碼錯誤
+      if (e.response?.statusCode == 400) {
+        throw Exception("註冊資料有誤，請檢查輸入");
+      } else if (e.response?.statusCode == 401) {
+        throw Exception("未授權，請確認帳號密碼");
+      } else {
+        throw Exception("伺服器錯誤，請稍後再試");
+      }
+    } catch (e) {
+      throw Exception("未知錯誤: $e");
+    }
+  }
+
   /// 登入並回傳 UserProfile
   Future<UserProfile> login(String identifier, String password) async {
     try {
