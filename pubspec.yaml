@@ -35,7 +35,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   transparent_image: ^2.0.1
-  intl: ^0.19.0
+  intl: ^0.20.2
   url_launcher: ^6.3.1
   insta_image_viewer: ^1.0.4
   table_calendar: ^3.1.2
@@ -54,6 +54,7 @@ dependencies:
   image_picker: ^1.2.0
   flutter_quill_extensions: ^11.0.0
   quill_native_bridge: ^11.0.1
+  flutter_launcher_icons: ^0.14.4
 
 dev_dependencies:
   flutter_test:
