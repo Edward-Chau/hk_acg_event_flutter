@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hk_acg_event_information/model/User_profile_model.dart';
 import 'package:hk_acg_event_information/provider/dio_provider.dart';
+import 'package:logger/web.dart';
 
 // 建立 AuthRepository
 class AuthRepository {
@@ -55,7 +56,7 @@ class AuthRepository {
           "password": password,
         },
       );
-
+      Logger().i(response);
       return UserProfile.fromJson(response.data);
     } on DioException catch (e) {
       // 判斷是否為 400 或 401，代表帳號或密碼錯誤
@@ -65,6 +66,7 @@ class AuthRepository {
         throw Exception("伺服器錯誤，請稍後再試");
       }
     } catch (e) {
+      print(e);
       throw Exception("未知錯誤: $e");
     }
   }
