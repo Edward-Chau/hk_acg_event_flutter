@@ -43,7 +43,7 @@ class _MembersettingScreenState extends ConsumerState<MembersettingScreen> {
               Text(userProfile.id),
               Text(userProfile.documentId),
               Text(userProfile.jwt),
-              Text(userProfile.usericon),
+              Text(userProfile.userAvatar),
               Text(userProfile.username),
               Text(userProfile.isLogin.toString()),
               SettingCard(

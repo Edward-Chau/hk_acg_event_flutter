@@ -2,7 +2,7 @@ class UserProfile {
   final String id;
   final String documentId;
   final String username;
-  final String usericon;
+  final String userAvatar;
   final String jwt;
   final bool isLogin;
 
@@ -10,7 +10,7 @@ class UserProfile {
     this.id = '',
     this.documentId = '',
     this.username = '',
-    this.usericon = '',
+    this.userAvatar = '',
     this.jwt = '',
     this.isLogin = false,
   });
@@ -20,18 +20,18 @@ class UserProfile {
     final jwt = json['jwt'] ?? '';
     String imageUrl = '';
 
-    if (user['user_icon'] != null &&
-        (user['user_icon'] as List).isNotEmpty &&
-        user['user_icon'][0]['formats'] != null &&
-        user['user_icon'][0]['formats']['medium'] != null) {
-      imageUrl = user['user_icon'][0]['formats']['medium']['url'];
+    if (user['user_avatar'] != null &&
+        (user['user_avatar'] as List).isNotEmpty &&
+        user['user_avatar'][0]['formats'] != null &&
+        user['user_avatar'][0]['formats']['medium'] != null) {
+      imageUrl = user['user_avatar'][0]['formats']['medium']['url'];
     }
 
     return UserProfile(
       id: user['id']?.toString() ?? '',
       documentId: user['documentId'] ?? '',
       username: user['user_name'] ?? '',
-      usericon: imageUrl, // ✅ 改這裡
+      userAvatar: imageUrl, // ✅ 改這裡
       jwt: jwt,
       isLogin: jwt != '',
     );
@@ -41,7 +41,7 @@ class UserProfile {
     String? id,
     String? documentId,
     String? username,
-    String? usericon,
+    String? userAvatar,
     String? jwt,
     bool? isLogin,
   }) {
@@ -49,7 +49,7 @@ class UserProfile {
       id: id ?? this.id,
       documentId: documentId ?? this.documentId,
       username: username ?? this.username,
-      usericon: usericon ?? this.usericon,
+      userAvatar: userAvatar ?? this.userAvatar,
       jwt: jwt ?? this.jwt,
       isLogin: isLogin ?? this.isLogin,
     );

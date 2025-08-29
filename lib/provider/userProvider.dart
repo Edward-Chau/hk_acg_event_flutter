@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hk_acg_event_information/model/User_profile_model.dart';
@@ -68,6 +69,58 @@ class UserNotifier extends StateNotifier<UserProfile> {
     await authRepository.logout();
     state = const UserProfile();
     Logger().d('成功登出');
+  }
+
+  // update profile
+  Future<void> update({
+    required String? userName,
+    required String? userAvatar,
+  }) async {
+    try {
+      final Dio dio = authRepository.dio;
+
+      String? newAvatarUrl;
+
+      // 1. 如果有 file，要先上傳圖片到 Strapi
+      if (userAvatar != null) {
+        final formData = FormData.fromMap({
+          "files": await MultipartFile.fromFile(
+            userAvatar,
+            filename: userAvatar.split('/').last,
+          ),
+        });
+
+        final uploadRes = await dio.post("/upload", data: formData);
+
+        if (uploadRes.statusCode == 200) {
+          final uploadedFile = uploadRes.data[0];
+          newAvatarUrl = uploadedFile["url"];
+          Logger().d("✅ 圖片上傳成功: $newAvatarUrl");
+        } else {
+          throw Exception("圖片上傳失敗: ${uploadRes.statusCode}");
+        }
+      }
+
+      final result = await dio.put(
+        '/profile/update',
+        data: {
+          if (userName != null) "user_name": userName,
+          if (newAvatarUrl != null) "user_avatar": newAvatarUrl,
+        },
+      );
+
+      if (result.statusCode != 200) {
+        throw Exception("更新失敗，請稍後再試");
+      }
+
+      state = state.copyWith(
+        username: userName ?? state.username,
+        userAvatar: newAvatarUrl ?? state.userAvatar,
+      );
+      Logger().d('✅ Profile 更新成功');
+    } catch (e) {
+      rethrow; // 錯誤往上丟給 UI
+    }
   }
 }
 
