@@ -26,11 +26,14 @@ class _BottomNavigationTabBarState
     final int selectedPageIndex = ref.watch(pageNavigationProvider);
     final userProfile = ref.watch(userProvider);
 
+    final Widget memberScreen =
+        userProfile.isLogin ? const MembersettingScreen() : const LoginScreen();
+
     List<Widget> displayScreen = [
       const Homescreen(), //首頁
       const Eventscreen(), //活動
       const ForumScreen(),
-      userProfile.isLogin ? const MembersettingScreen() : const LoginScreen()
+      memberScreen
     ]; //navigattionScreen
 
     return Scaffold(

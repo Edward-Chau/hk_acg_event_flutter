@@ -24,7 +24,7 @@ class SettingCard extends StatelessWidget {
               if (!hideArror)
                 const Icon(
                   Icons.arrow_forward_ios_rounded,
-                  size: 8,
+                  size: 16,
                 )
             ],
           ),

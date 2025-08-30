@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
 import 'package:hk_acg_event_information/Widget/setting_card.dart';
 import 'package:hk_acg_event_information/provider/userProvider.dart';
 
@@ -15,26 +16,43 @@ class _MembersettingScreenState extends ConsumerState<MembersettingScreen> {
   @override
   Widget build(BuildContext context) {
     final userProfile = ref.watch(userProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('會員中心'),
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+        padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 40),
         child: SingleChildScrollView(
           child: Column(
             children: [
               SettingCard(
                 onClick: () {},
-                hideArror: true,
+                // hideArror: true,
                 child: Row(
                   children: [
-                    Text(
-                      userProfile.username,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                    CircleAvatar(
+                      radius: 28,
+                      backgroundColor: Colors.grey[200],
+                      backgroundImage: userProfile.userAvatar != ''
+                          ? NetworkImage(userProfile.userAvatar)
+                          : null,
+                      child: userProfile.userAvatar == ''
+                          ? Icon(Icons.person,
+                              size: 40, color: Colors.grey[500])
+                          : null,
+                    ),
+                    const Gap(10),
+                    Expanded(
+                      child: Text(
+                        userProfile.username,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ],
