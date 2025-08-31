@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:hk_acg_event_information/NavigationPage.dart/member/page/user_detail.dart';
+import 'package:hk_acg_event_information/NavigationPage.dart/member/user_avater_widget.dart';
 import 'package:hk_acg_event_information/Widget/setting_card.dart';
 import 'package:hk_acg_event_information/provider/userProvider.dart';
 
@@ -27,21 +29,18 @@ class _MembersettingScreenState extends ConsumerState<MembersettingScreen> {
           child: Column(
             children: [
               SettingCard(
-                onClick: () {},
+                onClick: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (ctx) => const UserDetail(),
+                    ),
+                  );
+                },
                 // hideArror: true,
                 child: Row(
                   children: [
-                    CircleAvatar(
-                      radius: 28,
-                      backgroundColor: Colors.grey[200],
-                      backgroundImage: userProfile.userAvatar != ''
-                          ? NetworkImage(userProfile.userAvatar)
-                          : null,
-                      child: userProfile.userAvatar == ''
-                          ? Icon(Icons.person,
-                              size: 40, color: Colors.grey[500])
-                          : null,
-                    ),
+                    UserAvaterWidget(userAvatar: userProfile.userAvatar),
                     const Gap(10),
                     Expanded(
                       child: Text(

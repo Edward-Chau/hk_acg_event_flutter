@@ -31,7 +31,7 @@ class UserProfile {
       id: user['id']?.toString() ?? '',
       documentId: user['documentId'] ?? '',
       username: user['user_name'] ?? '',
-      userAvatar: imageUrl, // ✅ 改這裡
+      userAvatar: imageUrl,
       jwt: jwt,
       isLogin: jwt != '',
     );
