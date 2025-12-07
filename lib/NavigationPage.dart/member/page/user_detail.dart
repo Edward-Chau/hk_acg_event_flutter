@@ -24,7 +24,7 @@ class _UserDetailState extends ConsumerState<UserDetail> {
         title: const Text('個人資料'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
