@@ -27,7 +27,17 @@ class _MembersettingScreenState extends ConsumerState<MembersettingScreen> {
         padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 40),
         child: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // for debugging purposes only
+              // Text(userProfile.id),
+              // Text(userProfile.documentId),
+              // Text(userProfile.jwt),
+              // Text(userProfile.userAvatar),
+              // Text(userProfile.username),
+              // Text(userProfile.isLogin.toString()),
+              Text('帳號管理'),
+              Gap(5),
               SettingCard(
                 onClick: () {
                   Navigator.push(
@@ -57,17 +67,41 @@ class _MembersettingScreenState extends ConsumerState<MembersettingScreen> {
                   ],
                 ),
               ),
-              Text(userProfile.id),
-              Text(userProfile.documentId),
-              Text(userProfile.jwt),
-              Text(userProfile.userAvatar),
-              Text(userProfile.username),
-              Text(userProfile.isLogin.toString()),
+              Gap(10),
+              // 更多
+              Text('更多'),
+              const Gap(5),
+              SettingCard(
+                onClick: () {},
+                // hideArror: true,
+                child: const Text(
+                  '私隱政策',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    // color: Colors.red,
+                  ),
+                ),
+              ),
+              const Gap(5),
+              SettingCard(
+                onClick: () {},
+                // hideArror: true,
+                child: const Text(
+                  '聯絡我們',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    // color: Colors.red,
+                  ),
+                ),
+              ),
+              const Gap(20),
               SettingCard(
                 onClick: () {
                   ref.read(userProvider.notifier).logout();
                 },
-                hideArror: true,
+                // hideArror: true,
                 child: const Text(
                   '登出',
                   style: TextStyle(
